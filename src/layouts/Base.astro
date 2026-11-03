@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Daniel Nguyen | Full-stack Developer',
+  description = 'Daniel Nguyen is a full-stack developer in Calgary building web apps and AI-powered tools. Projects, experience and contact.',
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <a class="sr-only" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Daniel Nguyen, home">DN<span class="cursor" aria-hidden="true">_</span></a>
+        <nav aria-label="Primary">
+          <a href="/#work">Work</a>
+          <a href="/#experience">Experience</a>
+          <a href="/#about">About</a>
+          <a href="/#contact">Contact</a>
+          <a href="/DanielNguyen_Resume.pdf">Resume</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>2026 Daniel Nguyen. Calgary, AB.</span>
+        <span>Built with Astro. Set in Geist Mono.</span>
+      </div>
+    </footer>
+  </body>
+</html>

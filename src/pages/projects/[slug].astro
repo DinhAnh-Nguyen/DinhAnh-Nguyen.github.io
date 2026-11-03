@@ -1,0 +1,79 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const links = [
+  d.live && { href: d.live, label: 'Live site ->' },
+  d.repo && { href: d.repo, label: 'Source code ->' },
+].filter((l): l is { href: string; label: string } => Boolean(l));
+const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponent('Source access: ' + d.title)}`;
+---
+<Base title={`${d.title} | Daniel Nguyen`} description={d.summary}>
+  <section class="section on-dark head">
+    <div class="wrap">
+      <p class="crumb"><a href="/#work">&lt;- all work</a></p>
+      <h1>{d.title}</h1>
+      <p class="sum">{d.summary}</p>
+      <table class="spec meta">
+        <tbody>
+          <tr><th scope="row">Role</th><td>{d.role}</td></tr>
+          <tr><th scope="row">Year</th><td>{d.year}</td></tr>
+          <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
+          <tr>
+            <th scope="row">Links</th>
+            <td>
+              {links.map((l, i) => (<>{i > 0 && ' / '}<a href={l.href} rel="noopener">{l.label}</a></>))}
+              {!d.repo && (<>{links.length > 0 && ' / '}Source is private. <a href={askHref}>Ask for access</a></>)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section on-light">
+    <div class="wrap prose"><Content /></div>
+  </section>
+
+  <section class="section on-dark nextup">
+    <div class="wrap">
+      <a href={`/projects/${next.id}/`}>
+        <span>NEXT PROJECT</span>
+        <strong>{next.data.title} -&gt;</strong>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .crumb { font-size: 13px; margin-bottom: 28px; }
+  h1 { font-size: clamp(2.4rem, 9vw, 5.5rem); letter-spacing: -0.03em; margin-bottom: 20px; }
+  .sum { max-width: 36em; color: var(--muted); font-size: clamp(15px, 2.4vw, 18px); margin-bottom: 36px; }
+  .meta { max-width: 760px; }
+  .meta a { text-underline-offset: 4px; }
+
+  .prose { max-width: 44em; }
+  .prose :global(h2) { font-size: 1.1rem; letter-spacing: 0.04em; margin: 2.4em 0 0.8em; }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(h2)::before { content: '## '; color: var(--muted); }
+  .prose :global(ul) { display: grid; gap: 10px; margin: 0 0 1em; }
+  .prose :global(li) { padding-left: 2ch; text-indent: -2ch; }
+  .prose :global(li)::before { content: '- '; }
+  .prose :global(code) { border: 1px solid #000; padding: 0 5px; font-size: 0.9em; }
+
+  .nextup a { display: grid; gap: 6px; text-decoration: none; padding: 8px 0; }
+  .nextup span { font-size: 13px; letter-spacing: 0.08em; color: var(--muted); }
+  .nextup strong { font-size: clamp(1.6rem, 6vw, 3.4rem); text-transform: uppercase; letter-spacing: -0.02em; }
+  .nextup a:hover strong { text-decoration: underline; text-underline-offset: 8px; }
+</style>
