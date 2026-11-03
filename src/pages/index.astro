@@ -1,0 +1,250 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Frames from '../components/Frames.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const archive = [
+  { name: 'Ecommerce Website', stack: 'Next.js, TypeScript, Tailwind, Wix Studio API', year: '2024', note: 'OAuth sign-in, React Query data fetching.' },
+  { name: 'Movie App', stack: 'React, JavaScript, external APIs', year: '2024', note: 'Full-stack movie search.' },
+  { name: 'Secrets Access', stack: 'Express.js, HTML, CSS', year: '2024', note: 'Password-protected routes with tests.' },
+];
+
+const experience = [
+  {
+    when: '2025-02 / NOW',
+    role: 'Front-end Developer',
+    org: 'Empowered Futures',
+    points: [
+      'Work with designers to improve a web app UI in React.',
+      'Integrated Docker, Prisma and GraphQL for scalable development and database management.',
+      'Ship quality pull requests, following senior feedback and agile practice.',
+    ],
+  },
+  {
+    when: '2024-11 / NOW',
+    role: 'Full-stack Developer',
+    org: 'New Idea Machine',
+    points: [
+      'Built and maintain a contractor information database with React and Firebase.',
+      'Created reusable components and app-wide state with React Context.',
+      'Iterate quickly with clients, keeping communication open and responsive.',
+    ],
+  },
+  {
+    when: '2024-09 / 2025-04',
+    role: 'Front-end Developer',
+    org: 'DIVU Canada',
+    points: [
+      'Kept UX/UI performance scores high on Lighthouse.',
+      'Worked in a Git-driven team with fast sprints and code reviews.',
+    ],
+  },
+  {
+    when: '2024-08 / 2025-01',
+    role: 'Web Developer',
+    org: 'Inclucity Calgary',
+    points: [
+      'Redesigned and built the organization’s website, improving accessibility and responsiveness.',
+      'Used agile workflows and stakeholder input to ship a compliant, user-friendly site.',
+    ],
+  },
+];
+
+const skills: [string, string][] = [
+  ['Languages', 'TypeScript, JavaScript, Python, Java, C#, HTML, CSS (learning Go)'],
+  ['Frontend', 'React, Next.js, Tailwind CSS, three.js / react-three-fiber'],
+  ['Backend', 'Node.js, Express, GraphQL, Prisma, Drizzle'],
+  ['Data', 'PostgreSQL, MySQL, MongoDB, Firebase, Supabase'],
+  ['Cloud / Ops', 'Docker, Git, GitHub, Azure DevOps, Vercel, AWS'],
+  ['Tools', 'Jest, Figma, VS Code'],
+];
+---
+<Base>
+  <!-- 01 HERO (dark) -->
+  <section class="section on-dark hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
+        <h1>Daniel<br />Nguyen</h1>
+        <p class="pitch">
+          Full-stack developer in Calgary building web apps and AI-powered tools,
+          from the 3D interface down to the database.
+        </p>
+        <p class="actions">
+          <a class="btn" href="#work">View work</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </p>
+      </div>
+      <Frames />
+    </div>
+  </section>
+
+  <!-- 02 WORK (light) -->
+  <section class="section on-light" id="work">
+    <div class="wrap">
+      <div class="label"><b>01</b> / Selected work</div>
+      <ul class="rows">
+        {projects.map((p, i) => (
+          <li class="reveal">
+            <a href={`/projects/${p.id}/`}>
+              <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+              <span class="main">
+                <strong>{p.data.title}</strong>
+                <span class="sum">{p.data.summary}</span>
+              </span>
+              <span class="stack">{p.data.stack.join(' / ')}</span>
+              <span class="yr">{p.data.year}</span>
+              <span class="go" aria-hidden="true">-&gt;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="label archive-label"><b>02</b> / Earlier projects</div>
+      <ul class="archive">
+        {archive.map((a) => (
+          <li>
+            <strong>{a.name}</strong>
+            <span>{a.stack}</span>
+            <span class="note">{a.note}</span>
+            <span class="yr">{a.year}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 EXPERIENCE (dark) -->
+  <section class="section on-dark" id="experience">
+    <div class="wrap">
+      <div class="label"><b>03</b> / Experience</div>
+      <ul class="jobs">
+        {experience.map((j) => (
+          <li class="reveal">
+            <span class="when">{j.when}</span>
+            <div>
+              <h3>{j.role}</h3>
+              <p class="org">{j.org}, Calgary, AB</p>
+              <ul class="pts">
+                {j.points.map((pt) => <li>{pt}</li>)}
+              </ul>
+            </div>
+          </li>
+        ))}
+        <li class="reveal">
+          <span class="when">2023-09 / 2025-04</span>
+          <div>
+            <h3>Software Development Diploma</h3>
+            <p class="org">Southern Alberta Institute of Technology, Calgary, AB</p>
+            <ul class="pts">
+              <li>GPA 3.90. Web development, data structures, algorithms, system design.</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 ABOUT + SKILLS (light) -->
+  <section class="section on-light" id="about">
+    <div class="wrap">
+      <div class="label"><b>04</b> / About</div>
+      <div class="about-grid">
+        <!-- PLACEHOLDER: swap this block for <img src="/photo.jpg" alt="Daniel Nguyen"> when the photo arrives -->
+        <div class="photo" role="img" aria-label="Photo placeholder"><span>DN</span></div>
+        <div class="about-text">
+          <p>
+            I&rsquo;m a software developer based in Calgary. I finished SAIT&rsquo;s Software
+            Development diploma in 2025 with a 3.90 GPA, and since then I&rsquo;ve worked across
+            four teams on React, Next.js, Firebase, GraphQL and Prisma.
+          </p>
+          <p>
+            Outside client work I build my own products. Connecton, a 3D city for keeping in
+            touch with the people who matter, is the one I&rsquo;m proudest of: it taught me
+            to put the rules that matter (XP, limits, ownership) in the database, not the browser.
+          </p>
+          <p>Right now I&rsquo;m learning Go, and looking for my next full-stack role.</p>
+        </div>
+      </div>
+
+      <table class="spec skills" aria-label="Skills">
+        <tbody>
+          {skills.map(([k, v]) => (
+            <tr><th scope="row">{k}</th><td>{v}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 05 CONTACT (dark) -->
+  <section class="section on-dark" id="contact">
+    <div class="wrap">
+      <div class="label"><b>05</b> / Contact</div>
+      <p class="ask">Open to full-stack and AI-focused roles. Say hello.</p>
+      <a class="mail" href="mailto:dinhanhnguyen.work@gmail.com">dinhanhnguyen.work@gmail.com</a>
+      <p class="actions">
+        <a class="btn" href="https://github.com/DinhAnh-Nguyen" rel="me noopener">GitHub</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/dinhanh-nguyen/" rel="me noopener">LinkedIn</a>
+        <a class="btn ghost" href="/DanielNguyen_Resume.pdf">Resume (PDF)</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-top: clamp(40px, 7vw, 88px); }
+  .hero-grid { display: grid; gap: clamp(32px, 6vw, 64px); align-items: center; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.1fr 1fr; } }
+  .eyebrow { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  h1 { font-size: clamp(2.6rem, 10vw, 6.5rem); letter-spacing: -0.03em; margin-bottom: 28px; }
+  .pitch { max-width: 34em; color: var(--muted); }
+  .pitch, .ask { font-size: clamp(15px, 2.4vw, 18px); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+  .rows, .archive { border-top: 1px solid var(--line); }
+  .rows li { border-bottom: 1px solid var(--line); }
+  .rows a { display: grid; grid-template-columns: 3ch 1fr; gap: 6px 16px; padding: 22px 8px; text-decoration: none; transition: background 0.12s, color 0.12s; }
+  .rows a:hover, .rows a:focus-visible { background: var(--fg); color: var(--bg); outline-offset: -2px; }
+  .rows .main { display: grid; gap: 6px; }
+  .rows strong { font-size: clamp(1.4rem, 4vw, 2.2rem); text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.1; }
+  .rows .sum { font-size: 14px; max-width: 46em; }
+  .rows .stack, .rows .yr { font-size: 13px; grid-column: 2; opacity: 0.75; }
+  .rows .go { display: none; }
+  @media (min-width: 900px) {
+    .rows a { grid-template-columns: 4ch 1fr 17em 5ch 3ch; align-items: center; }
+    .rows .stack, .rows .yr { grid-column: auto; }
+    .rows .go { display: block; text-align: right; }
+  }
+
+  .archive-label { margin-top: clamp(48px, 8vw, 96px); }
+  .archive li { display: grid; gap: 2px 24px; padding: 14px 8px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .archive .note, .archive .yr { color: var(--muted); }
+  @media (min-width: 900px) { .archive li { grid-template-columns: 14em 1fr 1fr 5ch; } }
+
+  .jobs > li { display: grid; gap: 8px 32px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .jobs > li:last-child { border-bottom: 1px solid var(--line); }
+  @media (min-width: 800px) { .jobs > li { grid-template-columns: 13em 1fr; } }
+  .when { font-size: 13px; letter-spacing: 0.06em; color: var(--muted); }
+  .jobs h3 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
+  .org { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+  .pts { display: grid; gap: 6px; font-size: 14px; }
+  .pts li { padding-left: 2ch; text-indent: -2ch; }
+  .pts li::before { content: '- '; }
+
+  .about-grid { display: grid; gap: 32px; margin-bottom: clamp(40px, 6vw, 72px); }
+  @media (min-width: 800px) { .about-grid { grid-template-columns: 280px 1fr; gap: 56px; } }
+  .photo { aspect-ratio: 1; max-width: 320px; width: 100%; border: 1px solid #000; display: grid; place-items: center;
+    background-color: #fff; background-image: radial-gradient(#000 1px, transparent 1.4px); background-size: 6px 6px; }
+  .photo span { background: #fff; padding: 6px 14px; border: 1px solid #000; font-size: 2rem; font-weight: 600; letter-spacing: 0.1em; }
+  :global(.photo img) { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.35); }
+  .about-text { max-width: 40em; }
+  .skills th { background: #000; color: #fff; }
+
+  .ask { max-width: 28em; }
+  .mail { display: inline-block; font-size: clamp(1.1rem, 4.6vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; margin-top: 8px;
+    text-decoration-thickness: 2px; text-underline-offset: 8px; overflow-wrap: anywhere; }
+  .mail:hover { background: #fff; color: #000; }
+</style>

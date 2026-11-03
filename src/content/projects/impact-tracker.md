@@ -1,0 +1,31 @@
+---
+title: Impact Tracker
+order: 2
+summary: A webhook service that turns Linear tickets and merged GitHub pull requests into a Postgres record of what a team shipped.
+year: "2026"
+role: Backend design and build
+stack: [TypeScript, Express 5, Drizzle ORM, PostgreSQL, Webhooks]
+---
+
+## The problem
+
+Teams ship constantly, but "what did we actually deliver?" is scattered across a ticket tracker and a code host. Reports get written by hand from memory.
+
+## What I built
+
+A small Express and TypeScript service with two webhook endpoints:
+
+- **`/webhook/linear`** records an issue (with its story points) when it moves to *Done* or *Merged To Main*.
+- **`/webhook/github`** records a pull request (repository, additions, deletions) when it is closed *and* merged.
+
+Both write to PostgreSQL through Drizzle ORM, with unique keys on the Linear issue id and the GitHub PR id so a repeated delivery cannot create duplicates.
+
+## Engineering notes
+
+- **Signatures are verified before anything is parsed.** Each request is checked with an HMAC-SHA256 of the raw body against the shared secret, so the endpoints only accept genuine Linear and GitHub events. The raw body is kept for this, which is why the JSON parser is replaced with `express.raw`.
+- Only the events that matter are stored. Everything else gets a quick `200` and is ignored.
+- Typed tables with Drizzle keep the schema and the queries in one place.
+
+## Status
+
+An early-stage backend. Next steps: a small dashboard that charts delivered points and merged PRs over time, constant-time signature comparison, and tests. The source is in a private repository and is available to share on request.
