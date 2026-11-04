@@ -5,7 +5,10 @@ summary: A webhook service that turns Linear tickets and merged GitHub pull requ
 year: "2026"
 role: Backend design and build
 stack: [TypeScript, Express 5, Drizzle ORM, PostgreSQL, Webhooks]
+hero: pipeline
 ---
+import Figure from '../../components/Figure.astro';
+import TrackerModel from '../../components/figures/TrackerModel.astro';
 
 ## The problem
 
@@ -19,6 +22,10 @@ A small Express and TypeScript service with two webhook endpoints:
 - **`/webhook/github`** records a pull request (repository, additions, deletions) when it is closed *and* merged.
 
 Both write to PostgreSQL through Drizzle ORM, with unique keys on the Linear issue id and the GitHub PR id so a repeated delivery cannot create duplicates.
+
+<Figure n={2} caption="The data model, drawn from the Drizzle schema. Highlighted rows are primary or unique keys.">
+  <TrackerModel />
+</Figure>
 
 ## Engineering notes
 

@@ -1,0 +1,25 @@
+---
+import Diagram from '../Diagram.astro';
+---
+<Diagram
+  id="tracker-pipeline"
+  width={440}
+  height={528}
+  title="Impact Tracker pipeline"
+  desc="Linear sends an event when an issue moves to Done, and GitHub sends one when a pull request is merged. Both arrive at an Express and TypeScript service that keeps the raw request body. The service checks an HMAC-SHA256 signature and answers 401 without storing anything if it is wrong. Only the events that matter are kept, and everything else gets a 200 and is ignored. The kept events are saved to PostgreSQL through Drizzle in the completed_tasks and merged_prs tables, where unique ids block duplicates."
+  nodes={[
+    { x: 20, y: 16, w: 180, h: 56, lines: ['LINEAR', 'issue moves to Done'] },
+    { x: 240, y: 16, w: 180, h: 56, lines: ['GITHUB', 'pull request merged'] },
+    { x: 20, y: 124, w: 400, h: 60, lines: ['EXPRESS 5 + TYPESCRIPT', 'raw request body kept for signing'] },
+    { x: 20, y: 232, w: 400, h: 56, tone: 'dark', lines: ['HMAC-SHA256 CHECK', 'bad signature: 401, nothing stored'] },
+    { x: 20, y: 336, w: 400, h: 56, lines: ['KEEP ONLY WHAT MATTERS', 'everything else: 200 and ignore'] },
+    { x: 20, y: 440, w: 400, h: 72, tone: 'accent', lines: ['POSTGRESQL VIA DRIZZLE', 'completed_tasks / merged_prs', 'unique ids block duplicates'] },
+  ]}
+  edges={[
+    { pts: [[110, 72], [110, 124]], label: { x: 118, y: 96, text: '/webhook/linear' } },
+    { pts: [[330, 72], [330, 124]], label: { x: 322, y: 114, text: '/webhook/github', anchor: 'end' } },
+    { pts: [[220, 184], [220, 232]] },
+    { pts: [[220, 288], [220, 336]] },
+    { pts: [[220, 392], [220, 440]] },
+  ]}
+/>

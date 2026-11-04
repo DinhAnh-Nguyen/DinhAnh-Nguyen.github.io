@@ -1,0 +1,46 @@
+---
+// A captioned figure in the style of an architectural drawing sheet:
+// a framed drawing with a "FIG. 03" caption strip underneath.
+interface Props {
+  n: number;
+  caption: string;
+  split?: boolean;      // media on the left, notes (named slot) on the right
+  parallax?: boolean;   // gentle drift of the picture against the scroll
+  flush?: boolean;      // no outer margin (used in the page header)
+}
+const { n, caption, split = false, parallax = false, flush = false } = Astro.props;
+const label = `FIG. ${String(n).padStart(2, '0')}`;
+const hasNotes = Astro.slots.has('notes');
+---
+<figure class:list={['fig', 'reveal', { split: split && hasNotes, parallax, flush }]}>
+  <div class="body">
+    <div class="media"><slot /></div>
+    {hasNotes && <div class="notes"><slot name="notes" /></div>}
+  </div>
+  <figcaption><b>{label}</b> <span>{caption}</span></figcaption>
+</figure>
+
+<style>
+  .fig { margin: 0; border: 1px solid #000; background: #fff; grid-column: 1 / -1; margin-block: clamp(20px, 4vw, 48px); }
+  .fig.flush { margin: 0; }
+  .body { display: grid; }
+  .media { min-width: 0; }
+  .notes { padding: clamp(16px, 3vw, 28px); border-top: 1px solid #000; font-size: 14px; }
+  .split .body { grid-template-columns: 1fr; }
+  @media (min-width: 800px) {
+    .split .body { grid-template-columns: minmax(0, 360px) 1fr; }
+    .split .notes { border-top: 0; border-left: 1px solid #000; }
+  }
+  figcaption { display: flex; gap: 1.2ch; padding: 10px 14px; border-top: 1px solid #000; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; background: #fff; }
+  figcaption b { flex: none; }
+  figcaption span { color: #595959; }
+  .diagram-pad { padding: clamp(12px, 3vw, 28px); }
+
+  /* Parallax: the picture drifts a little inside a fixed frame. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .parallax .media :global(.drift) { animation: drift linear both; animation-timeline: view(); }
+      @keyframes drift { from { transform: translateY(-4%) scale(1.1); } to { transform: translateY(4%) scale(1.1); } }
+    }
+  }
+</style>

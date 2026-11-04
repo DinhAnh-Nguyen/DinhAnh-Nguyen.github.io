@@ -1,0 +1,17 @@
+---
+// Where the contact form sends people who have JavaScript turned off.
+import Base from '../layouts/Base.astro';
+---
+<Base title="Message sent | Daniel Nguyen" description="Thanks for your message." noindex>
+  <section class="section on-dark">
+    <div class="wrap">
+      <h1 class="title"><span class="dec">Thanks</span></h1>
+      <p class="msg">Your message was sent. I will reply by email.</p>
+      <p><a class="btn" href="/">Back to the site</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .msg { font-size: clamp(15px, 2.4vw, 18px); margin-bottom: 28px; }
+</style>

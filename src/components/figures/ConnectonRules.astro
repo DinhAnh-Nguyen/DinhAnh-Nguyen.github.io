@@ -1,0 +1,25 @@
+---
+import Diagram from '../Diagram.astro';
+---
+<Diagram
+  id="connecton-rules"
+  width={640}
+  height={280}
+  scroll
+  title="Where Connecton's rules are enforced"
+  desc="Logging a note from the app calls the log_interaction database function, which decides the XP. The XP goes into a ledger per connection and raises the city level, which unlocks more lots. Two layers sit under all of it in the database: row-level security, so every row has an owner, and constraints such as a maximum of 20 houses, one house per lot and house styles limited by level."
+  nodes={[
+    { x: 20, y: 40, w: 110, h: 64, tone: 'dark', lines: ['LOG A NOTE', 'from the app'] },
+    { x: 170, y: 40, w: 150, h: 64, tone: 'accent', lines: ['log_interaction()', 'decides the XP'] },
+    { x: 360, y: 40, w: 110, h: 64, lines: ['XP LEDGER', 'per connection'] },
+    { x: 510, y: 40, w: 110, h: 64, lines: ['CITY LEVEL', 'unlocks lots'] },
+    { x: 20, y: 150, w: 600, h: 48, tone: 'group', lines: ['Row-level security: every row has an owner'] },
+    { x: 20, y: 214, w: 600, h: 48, tone: 'group', lines: ['Constraints: max 20 houses, one per lot, styles by level'] },
+  ]}
+  edges={[
+    { pts: [[130, 72], [170, 72]] },
+    { pts: [[320, 72], [360, 72]] },
+    { pts: [[470, 72], [510, 72]] },
+    { pts: [[245, 104], [245, 150]], dashed: true },
+  ]}
+/>

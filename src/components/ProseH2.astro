@@ -1,0 +1,12 @@
+---
+// Case-study section heading: numbered with a CSS counter, and decodes into
+// place like the other headings. A plain copy is read by assistive tech.
+const html = await Astro.slots.render('default');
+const entities: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&#x27;': "'" };
+const text = html.replace(/<[^>]*>/g, '').replace(/&(amp|lt|gt|quot|#39|#x27);/g, (m) => entities[m]).trim();
+const { id } = Astro.props;
+---
+<h2 id={id} class="sec">
+  <span class="dec" aria-hidden="true" data-decode={text}>{text}</span>
+  <span class="sr-only">{text}</span>
+</h2>

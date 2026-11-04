@@ -3,6 +3,10 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ExtLink from '../../components/ExtLink.astro';
 import Gutter from '../../components/Gutter.astro';
+import Figure from '../../components/Figure.astro';
+import LoopVideo from '../../components/LoopVideo.astro';
+import ProseH2 from '../../components/ProseH2.astro';
+import TrackerPipeline from '../../components/figures/TrackerPipeline.astro';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -19,35 +23,59 @@ const links = [
   d.live && { href: d.live, label: 'Live site ->' },
   d.repo && { href: d.repo, label: 'Source code ->' },
 ].filter((l): l is { href: string; label: string } => Boolean(l));
-const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponent('Source access: ' + d.title)}`;
+// No email address on the site: access requests go through the contact form.
+const askHref = `/?topic=${encodeURIComponent('Source access: ' + d.title)}#contact`;
 ---
 <Base title={`${d.title} | Daniel Nguyen`} description={d.summary}>
   <section class="section on-dark head">
     <Gutter />
-    <div class="wrap">
-      <p class="crumb"><a href="/#work">&lt;- all work</a></p>
-      <h1>{d.title}</h1>
-      <p class="sum">{d.summary}</p>
-      <table class="spec meta">
-        <tbody>
-          <tr><th scope="row">Role</th><td>{d.role}</td></tr>
-          <tr><th scope="row">Year</th><td>{d.year}</td></tr>
-          <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
-          <tr>
-            <th scope="row">Links</th>
-            <td>
-              {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
-              {!d.repo && (<>{links.length > 0 && ' / '}Source is private. <a href={askHref}>Ask for access</a></>)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="wrap head-grid">
+      <div class="head-text">
+        <p class="crumb"><a href="/#work">&lt;- all work</a></p>
+        <h1 class="title">
+          <span class="dec" aria-hidden="true" data-decode={d.title}>{d.title}</span>
+          <span class="sr-only">{d.title}</span>
+        </h1>
+        <p class="sum">{d.summary}</p>
+        <table class="spec meta" aria-label="Project details">
+          <tbody>
+            <tr><th scope="row">Role</th><td>{d.role}</td></tr>
+            <tr><th scope="row">Year</th><td>{d.year}</td></tr>
+            <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
+            <tr>
+              <th scope="row">Links</th>
+              <td>
+                {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
+                {!d.repo && (<>{links.length > 0 && ' / '}Source is private. <a href={askHref}>Ask for access</a></>)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="head-fig">
+        {d.hero === 'video' && (
+          <Figure n={1} flush caption="Looping clip of the live city. Names are demo data.">
+            <LoopVideo src="/projects/connecton/city.mp4" poster="/projects/connecton/city-poster.webp" width={640} height={800}
+              label="Looping video of Connecton's isometric 3D city: cars and people move through the streets while some houses sleep." />
+          </Figure>
+        )}
+        {d.hero === 'pipeline' && (
+          <Figure n={1} flush caption="From webhook to database.">
+            <TrackerPipeline />
+          </Figure>
+        )}
+      </div>
     </div>
   </section>
 
   <section class="section on-light">
     <Gutter />
-    <div class="wrap"><div class="prose"><Content /></div></div>
+    <div class="wrap">
+      <div class="prose case">
+        <Content components={{ h2: ProseH2 }} />
+      </div>
+    </div>
   </section>
 
   <section class="section on-dark nextup">
@@ -62,23 +90,15 @@ const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponen
 </Base>
 
 <style>
+  .head-grid { display: grid; gap: clamp(32px, 5vw, 56px); align-items: start; }
+  @media (min-width: 960px) { .head-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); } }
   .crumb { font-size: 13px; margin-bottom: 28px; }
-  h1 { font-size: clamp(2.4rem, 9vw, 5.5rem); letter-spacing: -0.03em; margin-bottom: 20px; }
+  .head .title { font-size: clamp(2.6rem, 8.5vw, 5.8rem); margin-bottom: 24px; }
   .sum { max-width: 36em; color: var(--muted); font-size: clamp(15px, 2.4vw, 18px); margin-bottom: 36px; }
-  .meta { max-width: 760px; }
-  .meta a { text-underline-offset: 4px; }
-
-  .prose { max-width: 44em; }
-  .prose :global(h2) { font-size: 1.1rem; letter-spacing: 0.04em; margin: 2.4em 0 0.8em; }
-  .prose :global(h2:first-child) { margin-top: 0; }
-  .prose :global(h2)::before { content: '## '; color: var(--muted); }
-  .prose :global(ul) { display: grid; gap: 10px; margin: 0 0 1em; }
-  .prose :global(li) { padding-left: 2ch; text-indent: -2ch; }
-  .prose :global(li)::before { content: '- '; }
-  .prose :global(code) { border: 1px solid #000; padding: 0 5px; font-size: 0.9em; }
+  .meta { max-width: 640px; }
 
   .nextup a { display: grid; gap: 6px; text-decoration: none; padding: 8px 0; }
   .nextup span { font-size: 13px; letter-spacing: 0.08em; color: var(--muted); }
-  .nextup strong { font-size: clamp(1.6rem, 6vw, 3.4rem); text-transform: uppercase; letter-spacing: -0.02em; }
-  .nextup a:hover strong { text-decoration: underline; text-underline-offset: 8px; }
+  .nextup strong { font-size: clamp(1.6rem, 6vw, 3.4rem); text-transform: uppercase; letter-spacing: -0.02em; transition: color 0.15s; }
+  .nextup a:hover strong, .nextup a:focus-visible strong { color: var(--accent); }
 </style>

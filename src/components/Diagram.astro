@@ -1,0 +1,87 @@
+---
+// A small, accessible SVG diagram renderer in the site's black/white/lime style.
+// Describe boxes and arrows as data; this component draws them.
+export interface DiagramNode {
+  x: number; y: number; w: number; h: number;
+  lines: string[];                       // first line is the title
+  tone?: 'plain' | 'dark' | 'accent' | 'group';
+  dashed?: boolean;
+}
+export interface DiagramEdge {
+  pts: [number, number][];               // polyline, the last point gets the arrowhead
+  dashed?: boolean;
+  label?: { x: number; y: number; text: string; anchor?: 'start' | 'middle' | 'end' };
+}
+interface Props {
+  id: string;                            // unique per page, used for SVG ids
+  width: number;
+  height: number;
+  title: string;                         // short accessible name
+  desc: string;                          // full text description for screen readers
+  nodes: DiagramNode[];
+  edges?: DiagramEdge[];
+  scroll?: boolean;                      // allow sideways scroll on narrow screens
+}
+const { id, width, height, title, desc, nodes, edges = [], scroll = false } = Astro.props;
+const LINE = 18;
+---
+<div class:list={['diagram', { scroll }]} tabindex={scroll ? 0 : undefined} role={scroll ? 'region' : undefined} aria-label={scroll ? `${title} (scrollable)` : undefined}>
+  <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby={`${id}-t ${id}-d`} style={`max-width:${Math.round(width * 1.2)}px;${scroll ? `min-width:${Math.round(width * 0.86)}px;` : ""}`}>
+    <title id={`${id}-t`}>{title}</title>
+    <desc id={`${id}-d`}>{desc}</desc>
+    <defs>
+      <marker id={`${id}-arrow`} markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0 0 L9 4.5 L0 9 z" fill="currentColor" />
+      </marker>
+    </defs>
+
+    {nodes.filter((n) => n.tone === 'group').map((n) => (
+      <g>
+        <rect class="group" x={n.x} y={n.y} width={n.w} height={n.h} />
+        <text class="group-label" x={n.x + 12} y={n.y + 20}>{n.lines[0]}</text>
+      </g>
+    ))}
+
+    {edges.map((e) => (
+      <g>
+        <path class:list={['edge', { dashed: e.dashed }]} d={'M' + e.pts.map((p) => p.join(' ')).join(' L')} marker-end={`url(#${id}-arrow)`} />
+        {e.label && <text class="edge-label" x={e.label.x} y={e.label.y} text-anchor={e.label.anchor ?? 'start'}>{e.label.text}</text>}
+      </g>
+    ))}
+
+    {nodes.filter((n) => n.tone !== 'group').map((n) => {
+      const tone = n.tone ?? 'plain';
+      const top = n.y + n.h / 2 - ((n.lines.length - 1) * LINE) / 2 + 5;
+      return (
+        <g class={`node ${tone}`}>
+          <rect class:list={['box', { dashed: n.dashed }]} x={n.x} y={n.y} width={n.w} height={n.h} />
+          <text text-anchor="middle">
+            {n.lines.map((l, i) => (
+              <tspan x={n.x + n.w / 2} y={top + i * LINE} class={i === 0 ? 'ttl' : 'sub'}>{l}</tspan>
+            ))}
+          </text>
+        </g>
+      );
+    })}
+  </svg>
+</div>
+
+<style>
+  .diagram { color: #000; padding: clamp(12px, 3vw, 28px); }
+  .diagram.scroll { overflow-x: auto; }
+  svg { display: block; width: 100%; height: auto; margin-inline: auto; font-family: var(--font); font-size: 13px; }
+  .box { fill: #fff; stroke: #000; stroke-width: 1.5; }
+  .dark .box { fill: #000; }
+  .accent .box { fill: var(--accent); }
+  .group { fill: none; stroke: #000; stroke-width: 1; stroke-dasharray: 5 4; opacity: 0.6; }
+  .group-label { font-size: 11px; letter-spacing: 0.1em; fill: #595959; text-transform: uppercase; }
+  .box.dashed { stroke-dasharray: 5 4; }
+  .node text { fill: #000; }
+  .dark text { fill: #fff; }
+  .ttl { font-weight: 600; letter-spacing: 0.04em; }
+  .sub { font-size: 11.5px; opacity: 0.85; }
+  .edge { fill: none; stroke: #000; stroke-width: 1.5; }
+  .edge.dashed { stroke-dasharray: 5 4; }
+  .edge-label { font-size: 11px; fill: #000; letter-spacing: 0.04em; }
+  .diagram:focus-visible { outline: 2px dashed #000; outline-offset: 4px; }
+</style>
