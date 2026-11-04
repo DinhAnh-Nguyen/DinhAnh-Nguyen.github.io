@@ -1,0 +1,28 @@
+---
+// The scrolling code behind the hero moves for longer than 5 seconds, so it needs a visible
+// pause control (WCAG 2.2.2). This button is that control. With "reduce motion" on, the
+// backdrop does not move at all, so the button is hidden.
+---
+<button type="button" class="bg-toggle" data-bg-toggle>Pause background</button>
+
+<style>
+  .bg-toggle {
+    all: unset; box-sizing: border-box; cursor: pointer;
+    position: absolute; right: calc(var(--gutter) + 12px); bottom: 24px; z-index: 1;
+    padding: 4px 8px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--paper); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .bg-toggle:hover { background: var(--accent-lit); color: var(--ink); }
+  .bg-toggle:focus-visible { outline: 2px dashed var(--accent-lit); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .bg-toggle { display: none; } }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-bg-toggle]');
+  btn?.addEventListener('click', () => {
+    const backdrop = document.querySelector('[data-backdrop]');
+    if (!backdrop) return;
+    const paused = backdrop.toggleAttribute('data-user-paused');
+    btn.textContent = paused ? 'Play background' : 'Pause background';
+  });
+</script>

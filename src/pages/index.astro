@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Frames from '../components/Frames.astro';
+import BackdropToggle from '../components/BackdropToggle.astro';
 import ExtLink from '../components/ExtLink.astro';
 import CodeBackdrop from '../components/CodeBackdrop.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -64,7 +64,8 @@ const skills: [string, string][] = [
   <!-- HERO (dark) -->
   <section class="section on-dark hero">
     <CodeBackdrop />
-    <div class="wrap hero-grid">
+    <div class="noise" aria-hidden="true"></div>
+    <div class="wrap">
       <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
       <h1>Daniel<br />Nguyen</h1>
       <p class="pitch">
@@ -75,8 +76,8 @@ const skills: [string, string][] = [
         <a class="btn" href="#work">View work</a>
         <a class="btn ghost" href="#contact">Get in touch</a>
       </p>
-      <div class="frames-slot"><Frames /></div>
     </div>
+    <BackdropToggle />
   </section>
 
   <Ticker />
@@ -89,7 +90,7 @@ const skills: [string, string][] = [
         {projects.map((p, i) => (
           <li class="reveal" style={`--i:${i}`}>
             <a href={`/projects/${p.id}/`}>
-              <span class="idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="idx" aria-hidden="true">{p.data.added}</span>
               <span class="main">
                 <strong>{p.data.title}</strong>
                 <span class="sum">{p.data.summary}</span>
@@ -98,8 +99,11 @@ const skills: [string, string][] = [
                   <span class="stack">{p.data.stack.join(' / ')}</span>
                 </span>
               </span>
-              <svg class="go" viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true" focusable="false">
-                <path d="M6 18 18 6M8 6h10v10" />
+              <svg class="go" viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" aria-hidden="true" focusable="false">
+                <!-- The shaft has flat ends and stops inside the corner of the head, so only the
+                     head's sharp corner shows at the tip. -->
+                <path d="M5.47 18.53 18 6" stroke-linecap="butt" />
+                <path d="M8 6h10v10" stroke-linecap="square" />
               </svg>
             </a>
           </li>
@@ -180,15 +184,12 @@ const skills: [string, string][] = [
 <style>
   .hero { padding-top: clamp(40px, 7vw, 88px); }
   .hero { --fs: clamp(2.6rem, 10vw, 6.5rem); --lh: 1.05; }
-  .hero-grid { display: grid; column-gap: clamp(32px, 6vw, 64px); }
-  .frames-slot { margin-top: clamp(32px, 6vw, 64px); }
-  @media (min-width: 960px) {
-    /* Needs exactly four text rows in the left column (eyebrow, name, pitch, buttons). */
-    /* Text stacks in the left column; the frame box sits in the right column with its top
-       edge on the top of the capital letters of "DANIEL" (the last row absorbs any extra height). */
-    .hero-grid { grid-template-columns: 1.1fr 1fr; grid-template-rows: repeat(4, auto) 1fr; }
-    .hero-grid > :not(.frames-slot) { grid-column: 1; }
-    .frames-slot { grid-column: 2; grid-row: 2 / 6; align-self: start; margin-top: calc(((var(--lh) - var(--m-asc) - var(--m-desc)) / 2 + var(--m-asc) - var(--m-cap)) * var(--fs)); }
+  /* Old-TV grain over the code backdrop and under the text. It is a still image, so it
+     adds no motion. The SVG is fractal noise turned to grey and contrast-boosted. */
+  .noise {
+    position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    opacity: 0.14;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .eyebrow { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
   h1 { font-size: var(--fs); line-height: var(--lh); letter-spacing: -0.03em; margin-bottom: 28px; }
@@ -198,10 +199,17 @@ const skills: [string, string][] = [
 
   .rows { border-top: 1px solid var(--line); }
   .rows li { border-bottom: 1px solid var(--line); }
-  .rows a { display: grid; grid-template-columns: 3ch 1fr auto; gap: 8px clamp(12px, 3vw, 32px); align-items: start;
+  .rows a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px clamp(12px, 3vw, 32px); align-items: start;
     padding: clamp(20px, 3vw, 32px) 8px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .idx { grid-column: 1 / -1; }
+  /* From 800px up, the date column is as wide as Experience's, so the project titles start
+     on the same vertical line as the job titles below. (The 8px is this row's side padding.) */
+  @media (min-width: 800px) {
+    .rows a { grid-template-columns: calc(var(--col1) - 8px) minmax(0, 1fr) auto; column-gap: var(--colgap); }
+    .idx { grid-column: auto; }
+  }
   .rows a:hover, .rows a:focus-visible { background: var(--fg); color: var(--bg); outline-offset: -2px; }
-  .idx { font-size: 14px; padding-top: 0.5em; }
+  .idx { font-size: 13px; letter-spacing: 0.06em; padding-top: 0.5em; }
   .rows .main { display: grid; gap: 8px; }
   .rows strong { font-size: clamp(1.6rem, 5vw, 3rem); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
   .rows .sum { font-size: 15px; max-width: 46em; }
@@ -212,9 +220,9 @@ const skills: [string, string][] = [
   .rows a:hover .main, .rows a:focus-visible .main { transform: translateX(10px); }
   @media (prefers-reduced-motion: reduce) { .go, .rows .main { transition: none; } .rows a:hover .go, .rows a:focus-visible .go, .rows a:hover .main, .rows a:focus-visible .main { transform: none; } }
 
-  .jobs > li { display: grid; gap: 8px 32px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .jobs > li { display: grid; gap: 8px var(--colgap); padding: 28px 0; border-top: 1px solid var(--line); }
   .jobs > li:last-child { border-bottom: 1px solid var(--line); }
-  @media (min-width: 800px) { .jobs > li { grid-template-columns: 13em 1fr; } }
+  @media (min-width: 800px) { .jobs > li { grid-template-columns: var(--col1) 1fr; } }
   .when { font-size: 13px; letter-spacing: 0.06em; color: var(--mark); }
   .jobs h3 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
   .org { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
@@ -222,9 +230,14 @@ const skills: [string, string][] = [
   .pts li { padding-left: 2ch; text-indent: -2ch; }
   .pts li::before { content: '- '; color: var(--mark); }
 
-  .about-text { max-width: 40em; margin-bottom: clamp(40px, 6vw, 72px); }
+  .about-text { margin-bottom: clamp(40px, 6vw, 72px); }
   .edu { color: var(--muted); font-size: 14px; }
-  .skills th { background: var(--ink); color: var(--paper); width: 1%; white-space: nowrap; }
+  .skills th { background: var(--accent); color: var(--paper); width: 1%; white-space: nowrap; }
+  /* From 800px up, the label column ends where Experience's text column begins. */
+  @media (min-width: 800px) {
+    .skills { table-layout: fixed; }
+    .skills th { width: calc(var(--col1) + var(--colgap)); white-space: normal; }
+  }
 
   .ask { max-width: 28em; }
   .contact-grid { display: grid; gap: clamp(32px, 5vw, 56px); align-items: start; }

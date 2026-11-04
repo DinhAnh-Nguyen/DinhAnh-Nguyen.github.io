@@ -8,6 +8,8 @@ const projects = defineCollection({
     order: z.number(),
     summary: z.string(),
     year: z.string(),
+    // Year and month the repository was added to GitHub (YYYY-MM), shown beside the project title.
+    added: z.string().regex(/^\d{4}-\d{2}$/),
     role: z.string(),
     stack: z.array(z.string()),
     live: z.string().url().optional(),
