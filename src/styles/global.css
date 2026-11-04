@@ -4,9 +4,14 @@
   --font: 'Geist Mono Variable', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1120px;
+  /* The first column of every list on the home page (Selected work, Experience, the skills
+     table) is this wide, so their second columns all start on the same vertical line.
+     Fixed in px, not em, because the tables use a smaller font than the lists. */
+  --col1: 208px;
+  --colgap: 32px;
   /* Geist Mono vertical metrics, in em. With a heading's --fs and --lh they give the
      distance from the top of its line box to the top of its capital letters, so other
-     blocks can line up with the letters themselves (see .hero-grid and .head-grid). */
+     blocks can line up with the letters themselves (see .head-grid). */
   --m-asc: 1.005;
   --m-desc: 0.295;
   --m-cap: 0.71875;
