@@ -5,24 +5,11 @@
 const frames = [
   {
     text: `@DANIEL NGUYEN
-ROLE      FULL-STACK DEVELOPER
+ROLE      SOFTWARE ENGINEER
 FOCUS     WEB + AI
 BASE      CALGARY, AB
-EDU       SAIT DIPLOMA, GPA 3.90
 STATUS    OPEN TO WORK
-MAIL      dinhanhnguyen.work@gmail.com`,
-  },
-  {
-    text: `// webhook check (sketch)
-const ok = timingSafeEqual(
-  Buffer.from(signature),
-  Buffer.from(digest)
-);
-
-if (!ok)
-  return res.status(401).end();
-
-if (pr.merged) await save(pr);`,
+STACK     TS, REACT, POSTGRES`,
   },
   {
     text: `+----------+---------------------+
@@ -35,25 +22,15 @@ if (pr.merged) await save(pr);`,
 | LEARNING | GO                  |
 +----------+---------------------+`,
   },
-  {
-    text: `$ git log --oneline | wc -l
-219          # connecton
-
-$ cat TODO.md
-[x] ship connecton
-[x] ship this site
-[ ] learn go
-[ ] get hired :)`,
-  },
 ];
 const total = String(frames.length).padStart(2, '0');
 ---
 <section class="frames" aria-label="Facts about Daniel" data-frames>
-  <p class="sr-only">Full-stack developer in Calgary, open to work. Email dinhanhnguyen.work@gmail.com.</p>
+  <p class="sr-only">Software engineer in Calgary, open to work. Skills: TypeScript, JavaScript, Python, Java, React, Next.js, Tailwind, Node.js, Express, GraphQL, PostgreSQL, Firebase, three.js, Docker, Git, Vercel. Learning Go.</p>
   <div class="bar">
     <span data-counter>FRAME 01/{total}</span>
     <span class="ctl">
-      <button type="button" data-toggle aria-pressed="false">PAUSE</button>
+      <button type="button" data-toggle>PAUSE</button>
       <button type="button" data-next>NEXT -&gt;</button>
     </span>
   </div>
@@ -135,7 +112,6 @@ const total = String(frames.length).padStart(2, '0');
     function setPaused(value: boolean) {
       paused = value;
       toggle.textContent = paused ? 'PLAY' : 'PAUSE';
-      toggle.setAttribute('aria-pressed', String(paused));
       schedule();
     }
 
