@@ -1,0 +1,185 @@
+---
+// Blurred, slowly scrolling fake code behind the hero. It is decoration only:
+// the code is not in the page text (it lives in CSS generated content), so
+// screen readers, find-in-page and copy never see it. Everything here is made up.
+const columns = [
+  {
+    seconds: 40,
+    tone: 'plain',
+    code: `import express from 'express';
+import { z } from 'zod';
+import { db } from './db';
+import { events } from './schema';
+
+const app = express();
+const Body = z.object({
+  id: z.string().uuid(),
+  type: z.enum(['created', 'merged']),
+  points: z.number().int().min(0),
+});
+
+app.post('/events', async (req, res) => {
+  const parsed = Body.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json(parsed.error);
+  }
+  const { id, type, points } = parsed.data;
+  await db
+    .insert(events)
+    .values({ id, type, points })
+    .onConflictDoNothing();
+  res.status(202).end();
+});
+
+export async function summary(days = 7) {
+  const since = new Date(Date.now() - days * 864e5);
+  const rows = await db
+    .select()
+    .from(events)
+    .where(gte(events.at, since));
+  return rows.reduce((n, r) => n + r.points, 0);
+}
+
+process.on('SIGTERM', async () => {
+  await db.$client.end();
+  process.exit(0);
+});
+
+app.listen(3000, () => {
+  console.log('listening on :3000');
+});
+`,
+  },
+  {
+    seconds: 55,
+    tone: 'accent',
+    code: `export function City({ houses }: Props) {
+  const ref = useRef<THREE.Group>(null);
+  const [awake, setAwake] = useState(0);
+
+  useFrame((_, dt) => {
+    if (!ref.current) return;
+    ref.current.rotation.y += dt * 0.05;
+  });
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setAwake(houses.filter(isAwake).length);
+    }, 60_000);
+    return () => clearInterval(t);
+  }, [houses]);
+
+  return (
+    <group ref={ref}>
+      {houses.map((h) => (
+        <House
+          key={h.id}
+          position={h.lot}
+          asleep={!isAwake(h)}
+          onClick={() => open(h.id)}
+        />
+      ))}
+      <ambientLight intensity={0.6} />
+    </group>
+  );
+}
+
+function isAwake(h: House) {
+  const days = (Date.now() - h.lastNote) / 864e5;
+  return days < h.stayInTouchDays;
+}
+
+export const useCity = create<State>((set) => ({
+  level: 1,
+  xp: 0,
+  gain: (n) => set((s) => ({ xp: s.xp + n })),
+}));
+`,
+  },
+  {
+    seconds: 47,
+    tone: 'plain',
+    code: `create table connections (
+  id uuid primary key default gen_random_uuid(),
+  owner uuid not null references auth.users,
+  name text not null,
+  lot int not null,
+  stay_in_touch_days int default 14,
+  unique (owner, lot)
+);
+
+alter table connections enable row level security;
+
+create policy "own rows" on connections
+  for all using (owner = auth.uid());
+
+create function log_note(c uuid, body text)
+returns int language plpgsql as $$
+declare gained int;
+begin
+  gained := least(10, 2 + length(body) / 80);
+  insert into notes (connection, body)
+    values (c, body);
+  update profiles set xp = xp + gained
+   where id = auth.uid();
+  return gained;
+end $$;
+
+$ docker compose up -d
+[+] Running 3/3
+ ✔ Container db     Started
+ ✔ Container api    Started
+ ✔ Container web    Started
+
+$ npm test
+✔ webhook rejects a bad signature (4ms)
+✔ duplicate delivery is ignored (6ms)
+✔ log_note caps xp at 10 (11ms)
+ℹ tests 3  pass 3  fail 0
+`,
+  },
+];
+
+// CSS string escaping: backslash, quote, and newline (as \A).
+const css = (code: string) => code.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\A ');
+---
+<div class="backdrop" aria-hidden="true" data-backdrop>
+  <div class="cols">
+    {columns.map((c) => (
+      <div class={`col ${c.tone}`} style={`--c:"${css(c.code)}";--t:${c.seconds}s`}></div>
+    ))}
+  </div>
+  <div class="fade"></div>
+</div>
+
+<style>
+  .backdrop { position: absolute; inset: 0; z-index: -3; overflow: hidden; pointer-events: none; user-select: none; }
+  .cols { display: flex; gap: clamp(24px, 5vw, 72px); height: 100%; padding-inline: var(--gutter); }
+  /* align-self: flex-start keeps each column as tall as its text (not stretched to the hero),
+     so moving it by one third is exactly one copy of the code and the loop is seamless. */
+  .col { flex: 1; min-width: 0; align-self: flex-start; filter: blur(4px); will-change: transform; animation: run var(--t) linear infinite; }
+  /* The text is repeated three times so the loop never shows a gap, however tall the hero is. */
+  .col::before {
+    content: var(--c) '\A ' var(--c) '\A ' var(--c);
+    display: block; white-space: pre; font-size: 13px; line-height: 1.7; color: #d4d4d4; opacity: 0.5;
+  }
+  .col.accent::before { color: var(--accent); opacity: 0.4; }
+  .col:nth-child(n + 2) { display: none; }
+  @media (min-width: 720px) { .col:nth-child(2) { display: block; } }
+  @media (min-width: 1040px) { .col:nth-child(3) { display: block; } }
+  /* Top and bottom dissolve into the page, so the code never meets an edge. */
+  .fade { position: absolute; inset: 0; background: linear-gradient(var(--bg), transparent 22%, transparent 72%, var(--bg)); }
+  .backdrop[data-paused] .col { animation-play-state: paused; }
+  @keyframes run { to { transform: translateY(-33.3333%); } }
+  @media (prefers-reduced-motion: reduce) { .col { animation: none; will-change: auto; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-backdrop]');
+  if (root) {
+    // Do not animate (or blur-repaint) while the hero is scrolled out of view.
+    new IntersectionObserver(([e]) => {
+      root.toggleAttribute('data-paused', !e.isIntersecting);
+    }).observe(root);
+  }
+</script>
