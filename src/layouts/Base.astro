@@ -27,6 +27,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      var d = document.documentElement;
+      d.classList.add('js');
+      // If the motion script has not started within 2.5s (blocked or failed), show everything.
+      setTimeout(function () { if (!d.hasAttribute('data-motion-ready')) d.classList.add('no-motion'); }, 2500);
+    </script>
   </head>
   <body>
     <a class="sr-only" href="#main">Skip to content</a>
@@ -48,5 +54,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <small>&copy; 2026 Daniel Nguyen. Calgary, AB.</small>
       </div>
     </footer>
+    <script>import '../scripts/motion.js';</script>
   </body>
 </html>

@@ -3,6 +3,10 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Frames from '../components/Frames.astro';
 import ExtLink from '../components/ExtLink.astro';
+import Noise from '../components/Noise.astro';
+import Gutter from '../components/Gutter.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Ticker from '../components/Ticker.astro';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 
@@ -59,6 +63,8 @@ const skills: [string, string][] = [
 <Base>
   <!-- HERO (dark) -->
   <section class="section on-dark hero">
+    <Noise />
+    <Gutter />
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
@@ -76,13 +82,16 @@ const skills: [string, string][] = [
     </div>
   </section>
 
+  <Ticker />
+
   <!-- 01 WORK (light) -->
   <section class="section on-light" id="work" aria-labelledby="work-h">
+    <Gutter />
     <div class="wrap">
-      <h2 class="label" id="work-h"><b>01</b> / Selected work</h2>
+      <SectionHead n={1} total={4} title="Selected work" id="work-h" />
       <ul class="rows">
         {projects.map((p, i) => (
-          <li class="reveal">
+          <li class="reveal" style={`--i:${i}`}>
             <a href={`/projects/${p.id}/`}>
               <span class="idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <span class="main">
@@ -105,11 +114,12 @@ const skills: [string, string][] = [
 
   <!-- 02 EXPERIENCE (dark) -->
   <section class="section on-dark" id="experience" aria-labelledby="exp-h">
+    <Gutter />
     <div class="wrap">
-      <h2 class="label" id="exp-h"><b>02</b> / Experience</h2>
+      <SectionHead n={2} total={4} title="Experience" id="exp-h" />
       <ul class="jobs">
-        {experience.map((j) => (
-          <li class="reveal">
+        {experience.map((j, i) => (
+          <li class="reveal" style={`--i:${i % 2}`}>
             <span class="when">{j.when}</span>
             <div>
               <h3>{j.role}</h3>
@@ -126,9 +136,10 @@ const skills: [string, string][] = [
 
   <!-- 03 ABOUT + SKILLS (light) -->
   <section class="section on-light" id="about" aria-labelledby="about-h">
+    <Gutter />
     <div class="wrap">
-      <h2 class="label" id="about-h"><b>03</b> / About</h2>
-      <div class="about-text">
+      <SectionHead n={3} total={4} title="About" id="about-h" />
+      <div class="about-text reveal">
         <p>
           I&rsquo;m a software engineer based in Calgary. Since 2024 I&rsquo;ve
           worked across four teams on React, Next.js, Firebase, GraphQL and Prisma,
@@ -143,7 +154,7 @@ const skills: [string, string][] = [
         <p class="edu">Software Development Diploma, SAIT (2025).</p>
       </div>
 
-      <table class="spec skills" aria-label="Skills by area">
+      <table class="spec skills reveal" aria-label="Skills by area">
         <tbody>
           {skills.map(([k, v]) => (
             <tr><th scope="row">{k}</th><td>{v}</td></tr>
@@ -155,11 +166,12 @@ const skills: [string, string][] = [
 
   <!-- 04 CONTACT (dark) -->
   <section class="section on-dark" id="contact" aria-labelledby="contact-h">
+    <Gutter />
     <div class="wrap">
-      <h2 class="label" id="contact-h"><b>04</b> / Contact</h2>
-      <p class="ask">Open to software engineering roles. Say hello.</p>
-      <a class="mail" href="mailto:dinhanhnguyen.work@gmail.com">dinhanhnguyen.work@gmail.com</a>
-      <p class="actions">
+      <SectionHead n={4} total={4} title="Contact" id="contact-h" />
+      <p class="ask reveal">Open to software engineering roles. Say hello.</p>
+      <a class="mail reveal" style="--i:1" href="mailto:dinhanhnguyen.work@gmail.com">dinhanhnguyen.work@gmail.com</a>
+      <p class="actions reveal" style="--i:2">
         <ExtLink class="btn" href="https://github.com/DinhAnh-Nguyen" rel="me">GitHub</ExtLink>
         <ExtLink class="btn ghost" href="https://www.linkedin.com/in/dinhanh-nguyen/" rel="me">LinkedIn</ExtLink>
         <ExtLink class="btn ghost" href="/DanielNguyen_Resume.pdf">Resume (PDF)</ExtLink>
@@ -188,19 +200,21 @@ const skills: [string, string][] = [
   .rows strong { font-size: clamp(1.6rem, 5vw, 3rem); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
   .rows .sum { font-size: 15px; max-width: 46em; }
   .meta { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 13px; letter-spacing: 0.04em; opacity: 0.8; margin-top: 6px; }
-  .go { width: clamp(32px, 6vw, 64px); height: auto; transition: transform 0.2s ease; }
-  .rows a:hover .go, .rows a:focus-visible .go { transform: translate(6px, -6px); }
-  @media (prefers-reduced-motion: reduce) { .go { transition: none; } .rows a:hover .go, .rows a:focus-visible .go { transform: none; } }
+  .go { width: clamp(32px, 6vw, 64px); height: auto; transition: transform 0.2s ease, color 0.2s; }
+  .rows a:hover .go, .rows a:focus-visible .go { transform: translate(8px, -8px); color: var(--accent); }
+  .rows .main { transition: transform 0.2s ease; }
+  .rows a:hover .main, .rows a:focus-visible .main { transform: translateX(10px); }
+  @media (prefers-reduced-motion: reduce) { .go, .rows .main { transition: none; } .rows a:hover .go, .rows a:focus-visible .go, .rows a:hover .main, .rows a:focus-visible .main { transform: none; } }
 
   .jobs > li { display: grid; gap: 8px 32px; padding: 28px 0; border-top: 1px solid var(--line); }
   .jobs > li:last-child { border-bottom: 1px solid var(--line); }
   @media (min-width: 800px) { .jobs > li { grid-template-columns: 13em 1fr; } }
-  .when { font-size: 13px; letter-spacing: 0.06em; color: var(--muted); }
+  .when { font-size: 13px; letter-spacing: 0.06em; color: var(--mark); }
   .jobs h3 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
   .org { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
   .pts { display: grid; gap: 6px; font-size: 14px; }
   .pts li { padding-left: 2ch; text-indent: -2ch; }
-  .pts li::before { content: '- '; }
+  .pts li::before { content: '- '; color: var(--mark); }
 
   .about-text { max-width: 40em; margin-bottom: clamp(40px, 6vw, 72px); }
   .edu { color: var(--muted); font-size: 14px; }
@@ -209,5 +223,5 @@ const skills: [string, string][] = [
   .ask { max-width: 28em; }
   .mail { display: inline-block; font-size: clamp(1.1rem, 4.6vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; margin-top: 8px;
     text-decoration-thickness: 2px; text-underline-offset: 8px; overflow-wrap: anywhere; }
-  .mail:hover { background: #fff; color: #000; }
+  .mail:hover { background: var(--accent); color: #000; }
 </style>

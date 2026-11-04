@@ -1,0 +1,17 @@
+---
+// Small "01 / 04" counter plus a big title that decodes into place.
+// The animated copy is hidden from assistive tech; a plain copy is read instead.
+interface Props {
+  n: number;
+  total: number;
+  title: string;
+  id: string;
+}
+const { n, total, title, id } = Astro.props;
+const pad = (x: number) => String(x).padStart(2, '0');
+---
+<div class="label" aria-hidden="true"><b>{pad(n)}</b> / {pad(total)}</div>
+<h2 class="title" id={id}>
+  <span class="dec" aria-hidden="true" data-decode={title}>{title}</span>
+  <span class="sr-only">{title}</span>
+</h2>

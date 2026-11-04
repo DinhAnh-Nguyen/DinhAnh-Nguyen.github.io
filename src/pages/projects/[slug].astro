@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ExtLink from '../../components/ExtLink.astro';
+import Gutter from '../../components/Gutter.astro';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -22,6 +23,7 @@ const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponen
 ---
 <Base title={`${d.title} | Daniel Nguyen`} description={d.summary}>
   <section class="section on-dark head">
+    <Gutter />
     <div class="wrap">
       <p class="crumb"><a href="/#work">&lt;- all work</a></p>
       <h1>{d.title}</h1>
@@ -44,10 +46,12 @@ const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponen
   </section>
 
   <section class="section on-light">
+    <Gutter />
     <div class="wrap"><div class="prose"><Content /></div></div>
   </section>
 
   <section class="section on-dark nextup">
+    <Gutter />
     <div class="wrap">
       <a href={`/projects/${next.id}/`}>
         <span>NEXT PROJECT</span>
