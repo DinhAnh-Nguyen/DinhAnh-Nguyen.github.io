@@ -1,47 +1,31 @@
 ---
-// A slow strip of the stack. Moving content that lasts more than 5 seconds
-// needs a visible pause control (WCAG 2.2.2), so there is one. It also
-// pauses while the mouse is over the strip, and is a plain static list when
-// the visitor prefers reduced motion.
+// A slow strip of the stack. It pauses while the mouse is over it, and is a
+// plain static list when the visitor prefers reduced motion.
 const items = [
   'TypeScript', 'React', 'Next.js', 'Node.js', 'Express', 'PostgreSQL', 'Supabase',
   'GraphQL', 'Prisma', 'Docker', 'three.js', 'Vercel', 'Go (learning)',
 ];
 ---
-<section class="ticker" aria-label="Technologies I work with" data-ticker>
+<section class="ticker" aria-label="Technologies I work with">
   <div class="viewport">
     <div class="track">
       <ul>{items.map((t) => <li>{t}</li>)}</ul>
       <ul aria-hidden="true">{items.map((t) => <li>{t}</li>)}</ul>
     </div>
   </div>
-  <button type="button" data-ticker-toggle>Pause</button>
 </section>
 
 <style>
-  .ticker { display: flex; align-items: stretch; background: var(--ink); color: var(--paper); border-block: 1px solid var(--paper); }
-  .viewport { flex: 1; overflow: hidden; min-width: 0; }
+  .ticker { background: var(--ink); color: var(--paper); border-block: 1px solid var(--paper); }
+  .viewport { overflow: hidden; }
   .track { display: flex; width: max-content; animation: marquee 50s linear infinite; }
   .ticker ul { display: flex; flex-shrink: 0; padding: 14px 0; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
   .ticker li::after { content: '/'; margin: 0 1.6rem; color: var(--accent-lit); }
-  .ticker[data-paused] .track, .viewport:hover .track { animation-play-state: paused; }
-  button { all: unset; box-sizing: border-box; cursor: pointer; padding: 0 var(--gutter); border-left: 1px solid var(--paper); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--ink); color: var(--paper); }
-  button:hover { background: var(--accent-lit); color: var(--ink); }
-  button:focus-visible { outline: 2px dashed var(--accent-lit); outline-offset: -6px; }
+  .viewport:hover .track { animation-play-state: paused; }
   @keyframes marquee { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) {
     .track { animation: none; width: auto; flex-wrap: wrap; }
     .ticker ul[aria-hidden] { display: none; }
     .ticker ul { flex-wrap: wrap; padding: 14px var(--gutter); row-gap: 6px; white-space: normal; }
-    button { display: none; }
   }
 </style>
-
-<script>
-  const root = document.querySelector<HTMLElement>('[data-ticker]');
-  const btn = root?.querySelector<HTMLButtonElement>('[data-ticker-toggle]');
-  btn?.addEventListener('click', () => {
-    const paused = root!.toggleAttribute('data-paused');
-    btn.textContent = paused ? 'Play' : 'Pause';
-  });
-</script>

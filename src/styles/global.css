@@ -4,6 +4,12 @@
   --font: 'Geist Mono Variable', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1120px;
+  /* Geist Mono vertical metrics, in em. With a heading's --fs and --lh they give the
+     distance from the top of its line box to the top of its capital letters, so other
+     blocks can line up with the letters themselves (see .hero-grid and .head-grid). */
+  --m-asc: 1.005;
+  --m-desc: 0.295;
+  --m-cap: 0.71875;
   /* A printed drafting sheet: warm paper, ink black, and one vermilion "stamp" colour.
      --accent is for fills and for text on paper (4.8:1). On ink use --accent-lit (6.8:1). */
   --paper: #f1eee4;

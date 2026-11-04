@@ -26,29 +26,27 @@ const links = [
 <Base title={`${d.title} | Daniel Nguyen`} description={d.summary}>
   <section class="section on-dark head">
     <div class="wrap head-grid">
-      <div class="head-text">
-        <p class="crumb"><a href="/#work">&lt;- all work</a></p>
-        <h1 class="title">
-          <span class="dec" aria-hidden="true" data-decode={d.title}>{d.title}</span>
-          <span class="sr-only">{d.title}</span>
-        </h1>
-        <p class="sum">{d.summary}</p>
-        <table class="spec meta" aria-label="Project details">
-          <tbody>
-            <tr><th scope="row">Role</th><td>{d.role}</td></tr>
-            <tr><th scope="row">Year</th><td>{d.year}</td></tr>
-            <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
-            {links.length > 0 && (
-              <tr>
-                <th scope="row">Links</th>
-                <td>
-                  {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <p class="crumb"><a href="/#work">&lt;- all work</a></p>
+      <h1 class="title">
+        <span class="dec" aria-hidden="true" data-decode={d.title}>{d.title}</span>
+        <span class="sr-only">{d.title}</span>
+      </h1>
+      <p class="sum">{d.summary}</p>
+      <table class="spec meta" aria-label="Project details">
+        <tbody>
+          <tr><th scope="row">Role</th><td>{d.role}</td></tr>
+          <tr><th scope="row">Year</th><td>{d.year}</td></tr>
+          <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
+          {links.length > 0 && (
+            <tr>
+              <th scope="row">Links</th>
+              <td>
+                {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
 
       <div class="head-fig">
         {d.hero === 'video' && (
@@ -85,10 +83,19 @@ const links = [
 </Base>
 
 <style>
-  .head-grid { display: grid; gap: clamp(32px, 5vw, 56px); align-items: start; }
-  @media (min-width: 960px) { .head-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); } }
+  .head { --fs: clamp(2.6rem, 8.5vw, 5.8rem); --lh: 0.95; }
+  .head-grid { display: grid; column-gap: clamp(32px, 5vw, 56px); }
+  .head-fig { margin-top: clamp(32px, 5vw, 56px); }
+  @media (min-width: 960px) {
+    /* Needs exactly four text rows in the left column (crumb, name, summary, details). */
+    /* Figure 1 sits in the right column with its top edge on the top of the capital letters
+       of the project name (the last row absorbs any extra height). */
+    .head-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); grid-template-rows: repeat(4, auto) 1fr; }
+    .head-grid > :not(.head-fig) { grid-column: 1; }
+    .head-fig { grid-column: 2; grid-row: 2 / 6; align-self: start; margin-top: calc(((var(--lh) - var(--m-asc) - var(--m-desc)) / 2 + var(--m-asc) - var(--m-cap)) * var(--fs)); }
+  }
   .crumb { font-size: 13px; margin-bottom: 28px; }
-  .head .title { font-size: clamp(2.6rem, 8.5vw, 5.8rem); margin-bottom: 24px; }
+  .head .title { font-size: var(--fs); line-height: var(--lh); margin-bottom: 24px; }
   .sum { max-width: 36em; color: var(--muted); font-size: clamp(15px, 2.4vw, 18px); margin-bottom: 36px; }
   .meta { max-width: 640px; }
 
