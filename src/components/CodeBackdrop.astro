@@ -169,7 +169,7 @@ const css = (code: string) => code.replace(/\\/g, '\\\\').replace(/"/g, '\\"').r
   @media (min-width: 1040px) { .col:nth-child(3) { display: block; } }
   /* Top and bottom dissolve into the page, so the code never meets an edge. */
   .fade { position: absolute; inset: 0; background: linear-gradient(var(--bg), transparent 22%, transparent 72%, var(--bg)); }
-  .backdrop[data-paused] .col { animation-play-state: paused; }
+  .backdrop[data-paused] .col, .backdrop[data-user-paused] .col { animation-play-state: paused; }
   @keyframes run { to { transform: translateY(-33.3333%); } }
   @media (prefers-reduced-motion: reduce) { .col { animation: none; will-change: auto; } }
 </style>

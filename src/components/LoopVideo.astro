@@ -1,7 +1,8 @@
 ---
-// A silent looping clip. The script starts it; it never plays for visitors who
-// prefer reduced motion, or when JavaScript is off (the poster picture is
-// shown instead).
+// A silent looping clip with a visible Pause/Play button (auto-playing motion
+// over 5 seconds needs one, WCAG 2.2.2). The script starts it; it never plays
+// for visitors who prefer reduced motion, or when JavaScript is off (the
+// poster picture is shown instead).
 interface Props {
   src: string;
   poster: string;
@@ -13,15 +14,28 @@ const { src, poster, width, height, label } = Astro.props;
 ---
 <div class="loop" data-loop>
   <video src={src} poster={poster} width={width} height={height} muted loop playsinline preload="metadata" disablepictureinpicture aria-label={label}></video>
+  <button type="button" data-loop-toggle hidden>Play</button>
 </div>
 
 <style>
-  .loop { background: var(--ink); }
+  .loop { position: relative; background: var(--ink); }
   video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  button { all: unset; box-sizing: border-box; position: absolute; right: 10px; bottom: 10px; cursor: pointer;
+    padding: 6px 12px; background: var(--accent); color: var(--paper); border: 1px solid var(--paper); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  button:hover { background: var(--ink); color: var(--accent-lit); border-color: var(--accent-lit); }
+  button:focus-visible { outline: 2px dashed var(--paper); outline-offset: 3px; }
 </style>
 
 <script>
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<HTMLVideoElement>('[data-loop] video').forEach((v) => { void v.play().catch(() => {}); });
-  }
+  document.querySelectorAll<HTMLElement>('[data-loop]').forEach((root) => {
+    const video = root.querySelector('video')!;
+    const btn = root.querySelector<HTMLButtonElement>('[data-loop-toggle]')!;
+    const sync = () => { btn.textContent = video.paused ? 'Play' : 'Pause'; };
+    btn.hidden = false;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) void video.play().catch(() => {});
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    btn.addEventListener('click', () => { video.paused ? void video.play() : video.pause(); });
+    sync();
+  });
 </script>

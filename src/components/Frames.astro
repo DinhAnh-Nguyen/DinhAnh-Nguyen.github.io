@@ -113,6 +113,9 @@ const total = String(frames.length).padStart(2, '0');
     function setPaused(value: boolean) {
       paused = value;
       toggle.textContent = paused ? 'PLAY' : 'PAUSE';
+      // One control for all of the hero's motion: the frames and the code backdrop behind them.
+      toggle.setAttribute('aria-label', paused ? 'Play hero animation' : 'Pause hero animation');
+      document.querySelector('[data-backdrop]')?.toggleAttribute('data-user-paused', paused);
       schedule();
     }
 
