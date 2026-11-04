@@ -5,6 +5,7 @@ import Diagram from '../Diagram.astro';
   id="tracker-pipeline"
   width={440}
   height={528}
+  scroll
   title="Impact Tracker pipeline"
   desc="Linear sends an event when an issue moves to Done, and GitHub sends one when a pull request is merged. Both arrive at an Express and TypeScript service that keeps the raw request body. The service checks an HMAC-SHA256 signature and answers 401 without storing anything if it is wrong. Only the events that matter are kept, and everything else gets a 200 and is ignored. The kept events are saved to PostgreSQL through Drizzle in the completed_tasks and merged_prs tables, where unique ids block duplicates."
   nodes={[

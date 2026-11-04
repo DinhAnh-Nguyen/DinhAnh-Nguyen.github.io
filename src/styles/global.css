@@ -155,6 +155,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 .site-footer small { font-size: inherit; }
 .site-footer .block { display: grid; grid-template-columns: 2fr 2fr 1fr; border: 1px solid var(--line); }
 .site-footer .cell { padding: 12px 14px; }
+/* A 16px-high link is hard to tap. The padding grows the hit area to 28px and the negative margin
+   keeps the text on the same line as its neighbours. */
+.site-footer a { display: inline-block; padding-block: 6px; margin-block: -6px; }
 .site-footer .cell + .cell { border-left: 1px solid var(--line); }
 @media (max-width: 640px) {
   .site-footer .block { grid-template-columns: 1fr; }

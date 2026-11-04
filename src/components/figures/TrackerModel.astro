@@ -34,8 +34,10 @@ const ROW = 28;
 const rows = Math.max(...tables.map((t) => t.cols.length));
 const height = 20 + HEAD + rows * ROW + 20;
 ---
-<div class="diagram">
-  <svg viewBox={`0 0 600 ${height}`} style="max-width:720px" role="img" aria-labelledby="model-t model-d">
+<!-- Below ~560px the tables would shrink until the text is unreadable, so the drawing keeps a
+     minimum width and scrolls sideways inside its frame (the same approach as the Connecton diagrams). -->
+<div class="diagram scroll" tabindex="0" role="region" aria-label="Impact Tracker data model (scrollable)">
+  <svg viewBox={`0 0 600 ${height}`} style="max-width:720px;min-width:516px" role="img" aria-labelledby="model-t model-d">
     <title id="model-t">Impact Tracker data model</title>
     <desc id="model-d">Two tables. completed_tasks has id as primary key, linear_issue_id which is unique, title, story_points, completed_at and source. merged_prs has id as primary key, github_pr_id which is unique, title, repository, additions, deletions and merged_at.</desc>
     {tables.map((t) => (
@@ -62,6 +64,8 @@ const height = 20 + HEAD + rows * ROW + 20;
 
 <style>
   .diagram { color: var(--ink); padding: clamp(12px, 3vw, 28px); }
+  .diagram.scroll { overflow-x: auto; }
+  .diagram:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
   svg { display: block; width: 100%; height: auto; margin-inline: auto; font-family: var(--font); font-size: 13px; }
   svg text { fill: var(--ink); }
   .card { fill: var(--plate); stroke: var(--ink); stroke-width: 1.5; }
