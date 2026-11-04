@@ -200,7 +200,7 @@ const skills: [string, string][] = [
   .rows .sum { font-size: 15px; max-width: 46em; }
   .meta { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 13px; letter-spacing: 0.04em; opacity: 0.8; margin-top: 6px; }
   .go { width: clamp(32px, 6vw, 64px); height: auto; transition: transform 0.2s ease, color 0.2s; }
-  .rows a:hover .go, .rows a:focus-visible .go { transform: translate(8px, -8px); color: var(--accent); }
+  .rows a:hover .go, .rows a:focus-visible .go { transform: translate(8px, -8px); color: var(--accent-lit); }
   .rows .main { transition: transform 0.2s ease; }
   .rows a:hover .main, .rows a:focus-visible .main { transform: translateX(10px); }
   @media (prefers-reduced-motion: reduce) { .go, .rows .main { transition: none; } .rows a:hover .go, .rows a:focus-visible .go, .rows a:hover .main, .rows a:focus-visible .main { transform: none; } }
@@ -217,7 +217,7 @@ const skills: [string, string][] = [
 
   .about-text { max-width: 40em; margin-bottom: clamp(40px, 6vw, 72px); }
   .edu { color: var(--muted); font-size: 14px; }
-  .skills th { background: #000; color: #fff; width: 1%; white-space: nowrap; }
+  .skills th { background: var(--ink); color: var(--paper); width: 1%; white-space: nowrap; }
 
   .ask { max-width: 28em; }
   .contact-grid { display: grid; gap: clamp(32px, 5vw, 56px); align-items: start; }

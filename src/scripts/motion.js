@@ -1,4 +1,4 @@
-// Page-wide motion: reveal-on-scroll, heading decode, and the pointer glow.
+// Page-wide motion: reveal-on-scroll and the heading decode.
 // Everything here is optional polish. Without JavaScript the page is fully
 // visible, and with "reduce motion" on nothing moves.
 import { planDecode, frameAt } from '../lib/scramble.js';
@@ -57,42 +57,4 @@ if (!reduced.matches && 'IntersectionObserver' in window) {
     }, { rootMargin: '0px 0px 120px 0px', threshold: 0 });
     io.observe(el);
   });
-}
-
-// 3. A glow that follows the mouse across the light sections' dot grid.
-if (matchMedia('(pointer: fine)').matches) {
-  const sections = [...document.querySelectorAll('.section.on-light')];
-  let frame = 0;
-  let x = 0;
-  let y = 0;
-  let active = false;
-
-  const paint = () => {
-    frame = 0;
-    for (const s of sections) {
-      if (!active) {
-        s.style.removeProperty('--mx');
-        s.style.removeProperty('--my');
-        continue;
-      }
-      const r = s.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) continue;
-      s.style.setProperty('--mx', `${x - r.left}px`);
-      s.style.setProperty('--my', `${y - r.top}px`);
-    }
-  };
-  const queue = () => { if (!frame) frame = requestAnimationFrame(paint); };
-
-  addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    x = e.clientX;
-    y = e.clientY;
-    active = true;
-    queue();
-  }, { passive: true });
-  // Scrolling with a still mouse moves the sections under it, so follow along.
-  addEventListener('scroll', () => { if (active) queue(); }, { passive: true });
-  // Switch the glow off when the mouse leaves the window.
-  document.documentElement.addEventListener('pointerleave', () => { active = false; queue(); });
-  addEventListener('blur', () => { active = false; queue(); });
 }

@@ -1,6 +1,8 @@
 ---
 import { SITE, WEB3FORMS_ACCESS_KEY, FORM_READY } from '../config.js';
 ---
+<!-- One wrapper so the notice and the form are a single item in the contact grid. -->
+<div class="cf-wrap">
 {!FORM_READY && (
   <p class="setup reveal">The contact form is being set up. Until then, please message me on <a href="https://www.linkedin.com/in/dinhanh-nguyen/" target="_blank" rel="noopener noreferrer me">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>.</p>
 )}
@@ -36,6 +38,7 @@ import { SITE, WEB3FORMS_ACCESS_KEY, FORM_READY } from '../config.js';
   <button class="btn" type="submit" data-submit>Send message</button>
   <p class="status" role="status" aria-live="polite" data-status></p>
 </form>
+</div>
 
 <style>
   .setup { max-width: 640px; margin: 0 0 20px; padding: 12px 14px; border: 1px dashed var(--fg); font-size: 14px; }
@@ -43,11 +46,11 @@ import { SITE, WEB3FORMS_ACCESS_KEY, FORM_READY } from '../config.js';
   .field { display: grid; gap: 8px; }
   label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   input[type='text'], input[type='email'], textarea {
-    width: 100%; font: inherit; font-size: 16px; color: var(--fg); background: rgba(0, 0, 0, 0.55);
+    width: 100%; font: inherit; font-size: 16px; color: var(--fg); background: color-mix(in srgb, var(--ink) 60%, transparent);
     border: 1px solid var(--fg); border-radius: 0; padding: 12px 14px; line-height: 1.5;
   }
   textarea { resize: vertical; min-height: 9em; }
-  input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent-lit); outline-offset: 2px; }
   input[aria-invalid='true'], textarea[aria-invalid='true'] { border-color: #ff9c8f; border-width: 2px; }
   .err { margin: 0; color: #ff9c8f; font-size: 14px; }
   .err::before { content: '! '; font-weight: 600; }
@@ -55,7 +58,8 @@ import { SITE, WEB3FORMS_ACCESS_KEY, FORM_READY } from '../config.js';
   .btn { justify-self: start; }
   .btn[disabled] { opacity: 0.6; cursor: progress; }
   .status { margin: 0; min-height: 1.6em; font-size: 15px; }
-  .status[data-kind='ok'] { color: var(--accent); }
+  .status[data-kind='ok'] { color: var(--fg); }
+  .status[data-kind='ok']::before { content: '+ '; color: var(--accent-lit); }
   .status[data-kind='error'] { color: #ff9c8f; }
   /* Off-screen, not display:none, so simple bots still see and fill it. */
   .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

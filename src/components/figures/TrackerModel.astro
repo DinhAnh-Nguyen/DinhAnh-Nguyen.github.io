@@ -48,6 +48,7 @@ const height = 20 + HEAD + rows * ROW + 20;
           return (
             <g>
               {c[2] && <rect class="key" x={t.x + 1} y={y} width={W - 2} height={ROW} />}
+              {c[2] && <rect class="bar" x={t.x + 1} y={y} width="5" height={ROW} />}
               <line class="rule" x1={t.x} x2={t.x + W} y1={y} y2={y} />
               <text x={t.x + 12} y={y + ROW / 2 + 4.5}>{c[0]}</text>
               <text class="type" x={t.x + W - 12} y={y + ROW / 2 + 4.5} text-anchor="end">{c[1]}{c[2] ? `  ${c[2]}` : ''}</text>
@@ -60,13 +61,14 @@ const height = 20 + HEAD + rows * ROW + 20;
 </div>
 
 <style>
-  .diagram { color: #000; padding: clamp(12px, 3vw, 28px); }
+  .diagram { color: var(--ink); padding: clamp(12px, 3vw, 28px); }
   svg { display: block; width: 100%; height: auto; margin-inline: auto; font-family: var(--font); font-size: 13px; }
-  svg text { fill: #000; }
-  .card { fill: #fff; stroke: #000; stroke-width: 1.5; }
-  .head { fill: #000; }
-  .name { fill: #fff !important; font-weight: 600; letter-spacing: 0.04em; }
-  .key { fill: var(--accent); }
-  .rule { stroke: #000; stroke-width: 1; opacity: 0.35; }
+  svg text { fill: var(--ink); }
+  .card { fill: var(--plate); stroke: var(--ink); stroke-width: 1.5; }
+  .head { fill: var(--ink); }
+  .name { fill: var(--paper) !important; font-weight: 600; letter-spacing: 0.04em; }
+  .key { fill: var(--accent-tint); }
+  .bar { fill: var(--accent); }
+  .rule { stroke: var(--ink); stroke-width: 1; opacity: 0.35; }
   .type { font-size: 11.5px; }
 </style>
