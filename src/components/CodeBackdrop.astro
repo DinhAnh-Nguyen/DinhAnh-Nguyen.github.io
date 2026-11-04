@@ -161,9 +161,9 @@ const css = (code: string) => code.replace(/\\/g, '\\\\').replace(/"/g, '\\"').r
   /* The text is repeated three times so the loop never shows a gap, however tall the hero is. */
   .col::before {
     content: var(--c) '\A ' var(--c) '\A ' var(--c);
-    display: block; white-space: pre; font-size: 13px; line-height: 1.7; color: #d4d4d4; opacity: 0.5;
+    display: block; white-space: pre; font-size: 13px; line-height: 1.7; color: var(--paper); opacity: 0.5;
   }
-  .col.accent::before { color: var(--accent); opacity: 0.4; }
+  .col.accent::before { color: var(--accent-lit); opacity: 0.42; }
   .col:nth-child(n + 2) { display: none; }
   @media (min-width: 720px) { .col:nth-child(2) { display: block; } }
   @media (min-width: 1040px) { .col:nth-child(3) { display: block; } }

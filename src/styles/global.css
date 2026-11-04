@@ -4,21 +4,35 @@
   --font: 'Geist Mono Variable', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1120px;
-  /* Accent. Safe uses: as a fill behind black text, or as text on black.
-     Never as text on white (about 1.3:1). */
-  --accent: #c6ff3d;
+  /* A printed drafting sheet: warm paper, ink black, and one vermilion "stamp" colour.
+     --accent is for fills and for text on paper (4.8:1). On ink use --accent-lit (6.8:1). */
+  --paper: #f1eee4;
+  --ink: #0e0e0d;
+  --plate: #faf8f2;
+  --plate-muted: #5a564c; /* secondary text on a plate (figures, diagrams); 6.9:1 */
+  --accent: #c4301a;
+  --accent-lit: #ff6a4d;
+  --accent-tint: #f2cfc4;
 }
 
 /* Every section picks a polarity. Components only use --bg / --fg / --muted / --line. */
-.on-dark  { --bg: #000; --fg: #fff; --muted: #a3a3a3; --line: #fff; --mark: var(--accent); }
-.on-light { --bg: #fff; --fg: #000; --muted: #595959; --line: #000; --mark: #000; }
+.on-dark {
+  --bg: var(--ink); --fg: var(--paper); --muted: #a8a398; --line: var(--paper); --mark: var(--accent-lit);
+  --rule: rgba(241, 238, 228, 0.28);
+  --cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cpath d='M7.5 0V15M0 7.5H15' stroke='%23F1EEE4' stroke-opacity='.55' fill='none'/%3E%3C/svg%3E");
+}
+.on-light {
+  --bg: var(--paper); --fg: var(--ink); --muted: #5a564c; --line: var(--ink); --mark: var(--accent);
+  --rule: rgba(14, 14, 13, 0.3);
+  --cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15'%3E%3Cpath d='M7.5 0V15M0 7.5H15' stroke='%230E0E0D' stroke-opacity='.55' fill='none'/%3E%3C/svg%3E");
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: #000;
-  color: #fff;
+  background: var(--ink);
+  color: var(--paper);
   font-family: var(--font);
   font-size: 15px;
   line-height: 1.65;
@@ -29,9 +43,9 @@ body {
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-:focus-visible { outline: 2px dashed var(--fg, #fff); outline-offset: 4px; }
-.on-dark :focus-visible, .site-header :focus-visible { outline-color: var(--accent); }
-::selection { background: var(--accent); color: #000; }
+:focus-visible { outline: 2px dashed var(--fg, var(--paper)); outline-offset: 4px; }
+.on-dark :focus-visible, .site-header :focus-visible { outline-color: var(--accent-lit); }
+::selection { background: var(--accent); color: var(--paper); }
 
 h1, h2, h3 { margin: 0; font-weight: 600; line-height: 1.05; text-transform: uppercase; }
 p { margin: 0 0 1em; }
@@ -44,29 +58,32 @@ ul { margin: 0; padding: 0; list-style: none; }
   padding: clamp(56px, 9vw, 112px) var(--gutter);
 }
 .section::before, .section::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
-.section::before { z-index: -2; }
-.section::after { z-index: -1; }
 
-/* Dark sections: CRT scanlines and a darkened edge, like a monitor. */
-.section.on-dark::before {
-  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px);
+/* Every section is a drafting sheet: a hairline frame inset from the edge with a
+   ruler scale along its top and bottom, and crosshair marks on its corners. */
+.section::before {
+  z-index: -2; inset: 12px; border: 1px solid var(--rule);
+  background:
+    repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 24px) 0 0 / 100% 6px no-repeat,
+    repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 24px) 0 100% / 100% 6px no-repeat;
 }
-.section.on-dark::after {
-  background: radial-gradient(ellipse at 50% 40%, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+.section::after {
+  z-index: -1;
+  background:
+    var(--cross) left 4.5px top 4.5px no-repeat,
+    var(--cross) right 4.5px top 4.5px no-repeat,
+    var(--cross) left 4.5px bottom 4.5px no-repeat,
+    var(--cross) right 4.5px bottom 4.5px no-repeat;
 }
-
-/* Light sections: a dot grid that lights up around the mouse. */
-.section.on-light::before {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.16) 1px, transparent 1.4px);
-  background-size: 22px 22px;
-}
-.section.on-light::after {
-  background-image:
-    radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), rgba(198, 255, 61, 0.6), transparent 75%),
-    radial-gradient(rgba(0, 0, 0, 0.5) 1.2px, transparent 1.6px);
-  background-size: auto, 22px 22px;
-  -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000, transparent);
-  mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+@media (max-width: 600px) {
+  .section::before { inset: 8px; }
+  .section::after {
+    background:
+      var(--cross) left 0.5px top 0.5px no-repeat,
+      var(--cross) right 0.5px top 0.5px no-repeat,
+      var(--cross) left 0.5px bottom 0.5px no-repeat,
+      var(--cross) right 0.5px bottom 0.5px no-repeat;
+  }
 }
 
 .wrap { max-width: var(--max); margin: 0 auto; }
@@ -81,28 +98,27 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .btn {
   display: inline-block; padding: 12px 20px; border: 1px solid var(--accent);
-  background: var(--accent); color: #000; text-decoration: none;
+  background: var(--accent); color: var(--paper); text-decoration: none;
   font: inherit; font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
   transition: background 0.12s, color 0.12s, transform 0.08s;
 }
-.on-light .btn { border-color: #000; }
 .btn:hover { background: var(--bg); color: var(--fg); }
 .btn:active { transform: translateY(2px); }
 .btn.ghost { background: transparent; color: var(--fg); border-color: var(--fg); }
 .btn.ghost:hover { background: var(--fg); color: var(--bg); }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.sr-only:focus { position: fixed; top: 8px; left: 8px; width: auto; height: auto; clip: auto; z-index: 20; background: var(--accent); color: #000; padding: 8px 12px; }
+.sr-only:focus { position: fixed; top: 8px; left: 8px; width: auto; height: auto; clip: auto; z-index: 20; background: var(--accent); color: var(--paper); padding: 8px 12px; }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 10; background: #000; color: #fff; border-bottom: 1px solid #fff; --fg: #fff; }
+.site-header { position: sticky; top: 0; z-index: 10; background: var(--ink); color: var(--paper); border-bottom: 1px solid var(--paper); --fg: var(--paper); --mark: var(--accent-lit); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px var(--gutter); max-width: none; }
 .brand { text-decoration: none; font-weight: 600; letter-spacing: 0.06em; }
 .site-header nav { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
 .site-header nav a { text-decoration: none; padding: 2px 0; border-bottom: 1px solid transparent; transition: border-color 0.12s, color 0.12s; }
-.site-header nav a:hover { border-bottom-color: var(--accent); color: var(--accent); }
-.cursor { color: var(--accent); }
-.on-light .cursor { color: #000; }
+.site-header nav a:hover { border-bottom-color: var(--accent-lit); color: var(--accent-lit); }
+.cursor { color: var(--mark); }
+.on-light .cursor { color: var(--ink); }
 
 /* ---------- Motion (only when JS is on, and only if the visitor allows it) ---------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: calc(var(--i, 0) * 90ms); }
@@ -122,9 +138,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .spec th, .spec td { text-align: left; vertical-align: top; padding: 10px 14px; border: 1px solid var(--line); font-weight: 400; }
 .spec th { width: 9.5em; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
 
-.site-footer { padding: 24px var(--gutter); font-size: 13px; background: var(--bg); color: var(--fg); }
+/* Footer: the title block of the drawing sheet. */
+.site-footer { padding: clamp(20px, 3vw, 32px) var(--gutter); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--bg); color: var(--fg); }
 .site-footer small { font-size: inherit; }
-.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.site-footer .block { display: grid; grid-template-columns: 2fr 2fr 1fr; border: 1px solid var(--line); }
+.site-footer .cell { padding: 12px 14px; }
+.site-footer .cell + .cell { border-left: 1px solid var(--line); }
+@media (max-width: 640px) {
+  .site-footer .block { grid-template-columns: 1fr; }
+  .site-footer .cell + .cell { border-left: 0; border-top: 1px solid var(--line); }
+}
 
 @media (max-width: 520px) {
   .spec th, .spec td { padding: 8px 10px; }
@@ -162,4 +185,4 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .legend { display: grid; gap: 12px; margin-bottom: 1em; list-style: none; }
 .legend li { padding: 0; text-indent: 0; }
-.badge { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 2px solid #000; background: var(--accent); color: #000; font-weight: 600; font-size: 12px; margin-right: 4px; }
+.badge { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 2px solid var(--ink); background: var(--accent); color: var(--paper); font-weight: 600; font-size: 12px; margin-right: 4px; }

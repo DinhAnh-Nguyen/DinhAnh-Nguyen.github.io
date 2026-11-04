@@ -67,21 +67,22 @@ const LINE = 18;
 </div>
 
 <style>
-  .diagram { color: #000; padding: clamp(12px, 3vw, 28px); }
+  .diagram { color: var(--ink); padding: clamp(12px, 3vw, 28px); }
   .diagram.scroll { overflow-x: auto; }
   svg { display: block; width: 100%; height: auto; margin-inline: auto; font-family: var(--font); font-size: 13px; }
-  .box { fill: #fff; stroke: #000; stroke-width: 1.5; }
-  .dark .box { fill: #000; }
+  .box { fill: var(--plate); stroke: var(--ink); stroke-width: 1.5; }
+  .dark .box { fill: var(--ink); }
   .accent .box { fill: var(--accent); }
-  .group { fill: none; stroke: #000; stroke-width: 1; stroke-dasharray: 5 4; opacity: 0.6; }
-  .group-label { font-size: 11px; letter-spacing: 0.1em; fill: #595959; text-transform: uppercase; }
+  .group { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 5 4; opacity: 0.6; }
+  .group-label { font-size: 11px; letter-spacing: 0.1em; fill: var(--plate-muted); text-transform: uppercase; }
   .box.dashed { stroke-dasharray: 5 4; }
-  .node text { fill: #000; }
-  .dark text { fill: #fff; }
+  .node text { fill: var(--ink); }
+  .dark text { fill: var(--paper); }
+  .node.accent text { fill: var(--paper); }
   .ttl { font-weight: 600; letter-spacing: 0.04em; }
   .sub { font-size: 11.5px; opacity: 0.85; }
-  .edge { fill: none; stroke: #000; stroke-width: 1.5; }
+  .edge { fill: none; stroke: var(--ink); stroke-width: 1.5; }
   .edge.dashed { stroke-dasharray: 5 4; }
-  .edge-label { font-size: 11px; fill: #000; letter-spacing: 0.04em; }
-  .diagram:focus-visible { outline: 2px dashed #000; outline-offset: 4px; }
+  .edge-label { font-size: 11px; fill: var(--ink); letter-spacing: 0.04em; }
+  .diagram:focus-visible { outline: 2px dashed var(--ink); outline-offset: 4px; }
 </style>

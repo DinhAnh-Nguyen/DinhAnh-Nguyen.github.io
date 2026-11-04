@@ -21,7 +21,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#0e0e0d" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -53,9 +53,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer on-light">
-      <div class="wrap">
-        <small>&copy; 2026 Daniel Nguyen. Calgary, AB.</small>
-        <small><a href="/privacy/">Privacy policy</a></small>
+      <div class="wrap block">
+        <small class="cell">&copy; 2026 Daniel Nguyen</small>
+        <small class="cell">Software engineer / Calgary, AB</small>
+        <small class="cell"><a href="/privacy/">Privacy policy</a></small>
       </div>
     </footer>
     <script>import '../scripts/motion.js';</script>

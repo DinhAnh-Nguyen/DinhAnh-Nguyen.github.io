@@ -21,19 +21,19 @@ const hasNotes = Astro.slots.has('notes');
 </figure>
 
 <style>
-  .fig { margin: 0; border: 1px solid #000; background: #fff; color: #000; grid-column: 1 / -1; margin-block: clamp(20px, 4vw, 48px); }
+  .fig { margin: 0; border: 1px solid var(--ink); background: var(--plate); color: var(--ink); grid-column: 1 / -1; margin-block: clamp(20px, 4vw, 48px); }
   .fig.flush { margin: 0; }
   .body { display: grid; }
   .media { min-width: 0; }
-  .notes { padding: clamp(16px, 3vw, 28px); border-top: 1px solid #000; font-size: 14px; }
+  .notes { padding: clamp(16px, 3vw, 28px); border-top: 1px solid var(--ink); font-size: 14px; }
   .split .body { grid-template-columns: 1fr; }
   @media (min-width: 800px) {
     .split .body { grid-template-columns: minmax(0, 360px) 1fr; }
-    .split .notes { border-top: 0; border-left: 1px solid #000; }
+    .split .notes { border-top: 0; border-left: 1px solid var(--ink); }
   }
-  figcaption { display: flex; gap: 1.2ch; padding: 10px 14px; border-top: 1px solid #000; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; background: #fff; }
+  figcaption { display: flex; gap: 1.2ch; padding: 10px 14px; border-top: 1px solid var(--ink); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; background: var(--plate); }
   figcaption b { flex: none; }
-  figcaption span { color: #595959; }
+  figcaption span { color: var(--plate-muted); }
   .diagram-pad { padding: clamp(12px, 3vw, 28px); }
 
   /* Parallax: the picture drifts a little inside a fixed frame. */
