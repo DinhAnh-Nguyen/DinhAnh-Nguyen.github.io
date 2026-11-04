@@ -65,19 +65,17 @@ const skills: [string, string][] = [
   <section class="section on-dark hero">
     <CodeBackdrop />
     <div class="wrap hero-grid">
-      <div>
-        <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
-        <h1>Daniel<br />Nguyen</h1>
-        <p class="pitch">
-          Software engineer in Calgary building web apps and AI-powered tools,
-          from the 3D interface down to the database.
-        </p>
-        <p class="actions">
-          <a class="btn" href="#work">View work</a>
-          <a class="btn ghost" href="#contact">Get in touch</a>
-        </p>
-      </div>
-      <Frames />
+      <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
+      <h1>Daniel<br />Nguyen</h1>
+      <p class="pitch">
+        Software engineer in Calgary building web apps and AI-powered tools,
+        from the 3D interface down to the database.
+      </p>
+      <p class="actions">
+        <a class="btn" href="#work">View work</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </p>
+      <div class="frames-slot"><Frames /></div>
     </div>
   </section>
 
@@ -181,10 +179,19 @@ const skills: [string, string][] = [
 
 <style>
   .hero { padding-top: clamp(40px, 7vw, 88px); }
-  .hero-grid { display: grid; gap: clamp(32px, 6vw, 64px); align-items: center; }
-  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.1fr 1fr; } }
+  .hero { --fs: clamp(2.6rem, 10vw, 6.5rem); --lh: 1.05; }
+  .hero-grid { display: grid; column-gap: clamp(32px, 6vw, 64px); }
+  .frames-slot { margin-top: clamp(32px, 6vw, 64px); }
+  @media (min-width: 960px) {
+    /* Needs exactly four text rows in the left column (eyebrow, name, pitch, buttons). */
+    /* Text stacks in the left column; the frame box sits in the right column with its top
+       edge on the top of the capital letters of "DANIEL" (the last row absorbs any extra height). */
+    .hero-grid { grid-template-columns: 1.1fr 1fr; grid-template-rows: repeat(4, auto) 1fr; }
+    .hero-grid > :not(.frames-slot) { grid-column: 1; }
+    .frames-slot { grid-column: 2; grid-row: 2 / 6; align-self: start; margin-top: calc(((var(--lh) - var(--m-asc) - var(--m-desc)) / 2 + var(--m-asc) - var(--m-cap)) * var(--fs)); }
+  }
   .eyebrow { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-  h1 { font-size: clamp(2.6rem, 10vw, 6.5rem); letter-spacing: -0.03em; margin-bottom: 28px; }
+  h1 { font-size: var(--fs); line-height: var(--lh); letter-spacing: -0.03em; margin-bottom: 28px; }
   .pitch { max-width: 34em; color: var(--muted); }
   .pitch, .ask { font-size: clamp(15px, 2.4vw, 18px); }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
