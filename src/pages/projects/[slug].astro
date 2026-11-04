@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import ExtLink from '../../components/ExtLink.astro';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -33,7 +34,7 @@ const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponen
           <tr>
             <th scope="row">Links</th>
             <td>
-              {links.map((l, i) => (<>{i > 0 && ' / '}<a href={l.href} rel="noopener">{l.label}</a></>))}
+              {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
               {!d.repo && (<>{links.length > 0 && ' / '}Source is private. <a href={askHref}>Ask for access</a></>)}
             </td>
           </tr>
@@ -43,7 +44,7 @@ const askHref = `mailto:dinhanhnguyen.work@gmail.com?subject=${encodeURIComponen
   </section>
 
   <section class="section on-light">
-    <div class="wrap prose"><Content /></div>
+    <div class="wrap"><div class="prose"><Content /></div></div>
   </section>
 
   <section class="section on-dark nextup">

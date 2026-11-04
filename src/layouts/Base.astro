@@ -1,13 +1,14 @@
 ---
 import '../styles/global.css';
+import ExtLink from '../components/ExtLink.astro';
 
 interface Props {
   title?: string;
   description?: string;
 }
 const {
-  title = 'Daniel Nguyen | Full-stack Developer',
-  description = 'Daniel Nguyen is a full-stack developer in Calgary building web apps and AI-powered tools. Projects, experience and contact.',
+  title = 'Daniel Nguyen | Software Engineer',
+  description = 'Daniel Nguyen is a software engineer in Calgary building web apps and AI-powered tools. Projects, experience and contact.',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -31,21 +32,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="sr-only" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href="/" aria-label="Daniel Nguyen, home">DN<span class="cursor" aria-hidden="true">_</span></a>
+        <a class="brand" href="/" aria-label="DN, Daniel Nguyen home">DN<span class="cursor" aria-hidden="true">_</span></a>
         <nav aria-label="Primary">
           <a href="/#work">Work</a>
           <a href="/#experience">Experience</a>
           <a href="/#about">About</a>
           <a href="/#contact">Contact</a>
-          <a href="/DanielNguyen_Resume.pdf">Resume</a>
+          <ExtLink href="/DanielNguyen_Resume.pdf">Resume</ExtLink>
         </nav>
       </div>
     </header>
     <main id="main"><slot /></main>
-    <footer class="site-footer">
+    <footer class="site-footer on-light">
       <div class="wrap">
-        <span>2026 Daniel Nguyen. Calgary, AB.</span>
-        <span>Built with Astro. Set in Geist Mono.</span>
+        <small>&copy; 2026 Daniel Nguyen. Calgary, AB.</small>
       </div>
     </footer>
   </body>

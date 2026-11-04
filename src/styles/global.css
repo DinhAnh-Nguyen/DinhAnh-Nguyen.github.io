@@ -77,5 +77,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .spec th, .spec td { text-align: left; vertical-align: top; padding: 10px 14px; border: 1px solid var(--line); font-weight: 400; }
 .spec th { width: 9.5em; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
 
-.site-footer { padding: 24px var(--gutter); font-size: 13px; background: #fff; color: #000; }
+.site-footer { padding: 24px var(--gutter); font-size: 13px; background: var(--bg); color: var(--fg); }
+.site-footer small { font-size: inherit; }
 .site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+@media (max-width: 520px) {
+  .spec th, .spec td { padding: 8px 10px; }
+  .spec th { font-size: 11px; letter-spacing: 0.04em; }
+}
