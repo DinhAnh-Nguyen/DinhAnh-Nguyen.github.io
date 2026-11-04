@@ -1,6 +1,6 @@
 # dinhanh-nguyen.github.io
 
-Daniel Nguyen's portfolio. Astro (static), one monospace font, black/white sections, a scrolling code backdrop and TV-noise grain in the hero.
+Daniel Nguyen's portfolio. Astro (static), one monospace font, black/white sections, a scrolling code backdrop in the hero.
 
 ```bash
 npm install
@@ -12,7 +12,7 @@ npm run verify    # typecheck + tests + build
 
 - **Projects:** one markdown file each in `src/content/projects/`. Frontmatter sets the card and the details table; the body is the case study.
 - **Experience, skills, about text, earlier projects:** top of `src/pages/index.astro`.
-- **Hero background:** the scrolling code is `src/components/CodeBackdrop.astro` and its pause button is `src/components/BackdropToggle.astro` (moving content needs a pause control). The still TV-noise grain is the `.noise` rule in `src/pages/index.astro`.
+- **Hero background:** the scrolling code is `src/components/CodeBackdrop.astro` and its pause button is `src/components/BackdropToggle.astro` (moving content needs a pause control).
 - **Project dates:** each project has an `added` field (YYYY-MM, when its repository was added to GitHub), shown in Selected work.
 - **Column alignment:** `--col1` and `--colgap` in `src/styles/global.css` set the first column of Selected work, Experience and the skills table, so their second columns line up.
 - **Colours:** one palette, defined as tokens at the top of `src/styles/global.css` (`--paper`, `--ink`, `--accent`, `--accent-lit`). Use `--accent` for fills and for text on paper, `--accent-lit` for text on ink; every pair there is checked for AA contrast. Sections pick `.on-light` or `.on-dark` and each draws its own sheet frame (ruler ticks and corner crosshairs).
