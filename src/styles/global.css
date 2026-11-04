@@ -54,6 +54,8 @@ body {
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+/* Backup for the format-detection meta tag: if a browser still auto-links a number, keep it looking like plain text. */
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font: inherit !important; }
 :focus-visible { outline: 2px dashed var(--fg, var(--paper)); outline-offset: 4px; }
 .on-dark :focus-visible, .site-header :focus-visible { outline-color: var(--accent-lit); }
 ::selection { background: var(--accent); color: var(--paper); }
@@ -128,6 +130,23 @@ ul { margin: 0; padding: 0; list-style: none; }
 .site-header nav { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
 .site-header nav a { text-decoration: none; padding: 2px 0; border-bottom: 1px solid transparent; transition: border-color 0.12s, color 0.12s; }
 .site-header nav a:hover { border-bottom-color: var(--accent-lit); color: var(--accent-lit); }
+/* Phones: the logo gets its own row and the five links share the row below it, spread edge to
+   edge, instead of wrapping into two uneven lines beside the logo. The type shrinks with the
+   screen so all five always fit on one line (down to a 280px-wide phone). */
+@media (max-width: 700px) {
+  .site-header .wrap { display: block; padding: 0; }
+  .brand { display: block; padding: 10px var(--gutter) 8px; }
+  .site-header nav {
+    flex-wrap: nowrap; justify-content: space-between; gap: 0 6px;
+    padding: 0 var(--gutter); border-top: 1px solid rgba(241, 238, 228, 0.28);
+    font-size: clamp(10.5px, 3.4vw, 13px); letter-spacing: 0.06em;
+  }
+  .site-header nav a { padding: 10px 0; white-space: nowrap; }
+}
+/* Very small phones (under ~340px wide): a little tighter so the links keep a gap between them. */
+@media (max-width: 340px) {
+  .site-header nav { font-size: 10px; letter-spacing: 0.02em; }
+}
 .cursor { color: var(--mark); }
 .on-light .cursor { color: var(--ink); }
 

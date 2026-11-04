@@ -22,6 +22,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0e0e0d" />
+    <!-- iOS Safari turns digit patterns such as "2024-09 / 2025-04" into underlined phone links. -->
+    <meta name="format-detection" content="telephone=no, date=no, address=no" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
