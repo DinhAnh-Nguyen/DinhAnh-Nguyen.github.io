@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import Gutter from '../components/Gutter.astro';
+import ProseH2 from '../components/ProseH2.astro';
+import ExtLink from '../components/ExtLink.astro';
+const updated = '4 November 2026';
+---
+<Base title="Privacy Policy | Daniel Nguyen" description="What this portfolio site collects (almost nothing), how the contact form works, and how to ask me to delete your message.">
+  <section class="section on-dark head">
+    <Gutter />
+    <div class="wrap">
+      <p class="crumb"><a href="/">&lt;- home</a></p>
+      <h1 class="title">
+        <span class="dec" aria-hidden="true" data-decode="Privacy policy">Privacy policy</span>
+        <span class="sr-only">Privacy policy</span>
+      </h1>
+      <p class="sum">Short version: this site does not track you. The only personal information I receive is what you choose to send through the contact form.</p>
+      <p class="updated">Last updated: {updated}</p>
+    </div>
+  </section>
+
+  <section class="section on-light">
+    <Gutter />
+    <div class="wrap">
+      <div class="prose policy">
+        <ProseH2 id="who">Who I am</ProseH2>
+        <p>This is the personal website of Daniel Nguyen, a software engineer in Calgary, Alberta, Canada. I am responsible for the personal information described on this page.</p>
+
+        <ProseH2 id="collect">What this site collects</ProseH2>
+        <p>Nothing automatically. There are no analytics, no advertising or tracking cookies, and no fingerprinting. The site's fonts are hosted on the site itself, so your browser does not contact Google or any other font provider.</p>
+
+        <ProseH2 id="form">The contact form</ProseH2>
+        <p>If you use the form, you give me your name, email address and message. I use them only to read your message and reply to you. I do not sell them, share them for marketing, or add you to a mailing list.</p>
+
+        <ProseH2 id="processor">Who handles the form</ProseH2>
+        <p>The form is processed by <ExtLink href="https://web3forms.com">Web3Forms</ExtLink>, a form-handling service. It receives what you type and forwards it to my email inbox. It may also process technical data, such as your IP address, to block spam, under <ExtLink href="https://web3forms.com/privacy">its own privacy policy</ExtLink>. After that, your message is stored in my email account.</p>
+
+        <ProseH2 id="hosting">Hosting</ProseH2>
+        <p>The site is hosted on GitHub Pages. GitHub may record technical data such as IP addresses when it serves pages, as described in <ExtLink href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</ExtLink>. I do not receive or use that data.</p>
+
+        <ProseH2 id="resume">My resume</ProseH2>
+        <p>The downloadable resume PDF contains the contact details I chose to publish. Nothing is recorded about who downloads it.</p>
+
+        <ProseH2 id="links">Links to other sites</ProseH2>
+        <p>This site links to GitHub, LinkedIn and my project demos. Those sites have their own privacy policies, and this one does not cover them.</p>
+
+        <ProseH2 id="keep">How long I keep your message</ProseH2>
+        <p>I keep a message for as long as it takes to reply and follow up, and normally delete it about 12 months after our last exchange.</p>
+
+        <ProseH2 id="rights">Your choices</ProseH2>
+        <p>You can ask what I hold about you, ask me to correct it, or ask me to delete it. Send a message through the <a href="/#contact">contact form</a> with the subject or first line "Privacy request", and I will respond. I aim to follow Canadian privacy law, including Alberta's Personal Information Protection Act.</p>
+
+        <ProseH2 id="changes">Changes</ProseH2>
+        <p>If I change this policy, I will update the date at the top of this page.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .crumb { font-size: 13px; margin-bottom: 28px; }
+  .head .title { font-size: clamp(2.6rem, 8.5vw, 5.8rem); margin-bottom: 24px; }
+  .sum { max-width: 36em; color: var(--muted); font-size: clamp(15px, 2.4vw, 18px); margin-bottom: 12px; }
+  .updated { color: var(--muted); font-size: 13px; letter-spacing: 0.06em; }
+  .policy { counter-reset: sec; }
+  .policy :global(h2.sec) { font-size: clamp(1.1rem, 2vw, 1.4rem); margin: 2.2em 0 0.7em; }
+  .policy :global(h2.sec:first-child) { margin-top: 0; }
+  .policy :global(h2.sec)::before { content: counter(sec, decimal-leading-zero) ' / ' / ''; counter-increment: sec; color: var(--muted); font-size: 0.7em; letter-spacing: 0.1em; margin-right: 0.6em; }
+  .policy :global(p a) { text-underline-offset: 4px; }
+</style>

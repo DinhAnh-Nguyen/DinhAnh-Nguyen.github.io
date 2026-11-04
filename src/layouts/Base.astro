@@ -5,10 +5,12 @@ import ExtLink from '../components/ExtLink.astro';
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 const {
   title = 'Daniel Nguyen | Software Engineer',
   description = 'Daniel Nguyen is a software engineer in Calgary building web apps and AI-powered tools. Projects, experience and contact.',
+  noindex = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -21,6 +23,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#000000" />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -52,6 +55,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <footer class="site-footer on-light">
       <div class="wrap">
         <small>&copy; 2026 Daniel Nguyen. Calgary, AB.</small>
+        <small><a href="/privacy/">Privacy policy</a></small>
       </div>
     </footer>
     <script>import '../scripts/motion.js';</script>

@@ -7,6 +7,7 @@ import Noise from '../components/Noise.astro';
 import Gutter from '../components/Gutter.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Ticker from '../components/Ticker.astro';
+import ContactForm from '../components/ContactForm.astro';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 
@@ -169,13 +170,17 @@ const skills: [string, string][] = [
     <Gutter />
     <div class="wrap">
       <SectionHead n={4} total={4} title="Contact" id="contact-h" />
-      <p class="ask reveal">Open to software engineering roles. Say hello.</p>
-      <a class="mail reveal" style="--i:1" href="mailto:dinhanhnguyen.work@gmail.com">dinhanhnguyen.work@gmail.com</a>
-      <p class="actions reveal" style="--i:2">
-        <ExtLink class="btn" href="https://github.com/DinhAnh-Nguyen" rel="me">GitHub</ExtLink>
-        <ExtLink class="btn ghost" href="https://www.linkedin.com/in/dinhanh-nguyen/" rel="me">LinkedIn</ExtLink>
-        <ExtLink class="btn ghost" href="/DanielNguyen_Resume.pdf">Resume (PDF)</ExtLink>
-      </p>
+      <div class="contact-grid">
+        <div>
+          <p class="ask reveal">Open to software engineering roles. Send me a message and I will reply by email.</p>
+          <p class="actions reveal" style="--i:1">
+            <ExtLink class="btn ghost" href="https://github.com/DinhAnh-Nguyen" rel="me">GitHub</ExtLink>
+            <ExtLink class="btn ghost" href="https://www.linkedin.com/in/dinhanh-nguyen/" rel="me">LinkedIn</ExtLink>
+            <ExtLink class="btn ghost" href="/DanielNguyen_Resume.pdf">Resume (PDF)</ExtLink>
+          </p>
+        </div>
+        <ContactForm />
+      </div>
     </div>
   </section>
 </Base>
@@ -221,7 +226,6 @@ const skills: [string, string][] = [
   .skills th { background: #000; color: #fff; width: 1%; white-space: nowrap; }
 
   .ask { max-width: 28em; }
-  .mail { display: inline-block; font-size: clamp(1.1rem, 4.6vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; margin-top: 8px;
-    text-decoration-thickness: 2px; text-underline-offset: 8px; overflow-wrap: anywhere; }
-  .mail:hover { background: var(--accent); color: #000; }
+  .contact-grid { display: grid; gap: clamp(32px, 5vw, 56px); align-items: start; }
+  @media (min-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); } }
 </style>

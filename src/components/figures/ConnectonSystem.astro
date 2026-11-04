@@ -1,0 +1,26 @@
+---
+import Diagram from '../Diagram.astro';
+---
+<Diagram
+  id="connecton-system"
+  width={640}
+  height={430}
+  scroll
+  title="Connecton system overview"
+  desc="The Connecton app runs in the browser as an installable web app built with React, three.js and Tailwind. It sends queries to Supabase, which holds login, a Postgres database with row-level security and the log_interaction function, and edge functions. One edge function drafts messages by calling the Gemini AI. Another runs every 15 minutes and sends web push reminders back to the browser when a house falls asleep."
+  nodes={[
+    { x: 20, y: 150, w: 170, h: 120, tone: 'dark', lines: ['BROWSER / PWA', 'React 19', 'three.js (R3F)', 'Tailwind', 'installable + push'] },
+    { x: 250, y: 16, w: 200, h: 380, tone: 'group', lines: ['Supabase'] },
+    { x: 270, y: 44, w: 160, h: 56, lines: ['AUTH', 'email + 6-digit code'] },
+    { x: 270, y: 126, w: 160, h: 130, tone: 'accent', lines: ['POSTGRES', 'row-level security', 'log_interaction()', '20-house cap'] },
+    { x: 270, y: 290, w: 160, h: 90, lines: ['EDGE FUNCTIONS', 'draft-message', 'process-reminders', 'cron, every 15 min'] },
+    { x: 510, y: 292, w: 110, h: 48, lines: ['GEMINI', 'AI drafts'] },
+    { x: 510, y: 350, w: 110, h: 48, lines: ['WEB PUSH', 'reminders'] },
+  ]}
+  edges={[
+    { pts: [[190, 190], [250, 190]], label: { x: 196, y: 182, text: 'queries' } },
+    { pts: [[430, 316], [510, 316]], label: { x: 436, y: 308, text: 'prompt' } },
+    { pts: [[430, 374], [510, 374]], label: { x: 436, y: 366, text: 'send' } },
+    { pts: [[565, 398], [565, 414], [105, 414], [105, 270]], dashed: true, label: { x: 335, y: 408, text: 'push: a house fell asleep', anchor: 'middle' } },
+  ]}
+/>

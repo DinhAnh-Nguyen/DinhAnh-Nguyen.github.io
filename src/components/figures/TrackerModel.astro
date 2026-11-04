@@ -1,0 +1,72 @@
+---
+// The two tables, drawn from the real Drizzle schema.
+type Col = [name: string, type: string, flag?: string];
+const tables: { x: number; name: string; cols: Col[] }[] = [
+  {
+    x: 20,
+    name: 'completed_tasks',
+    cols: [
+      ['id', 'uuid', 'PK'],
+      ['linear_issue_id', 'text', 'UNIQUE'],
+      ['title', 'text'],
+      ['story_points', 'int'],
+      ['completed_at', 'timestamp'],
+      ['source', 'text'],
+    ],
+  },
+  {
+    x: 310,
+    name: 'merged_prs',
+    cols: [
+      ['id', 'uuid', 'PK'],
+      ['github_pr_id', 'int', 'UNIQUE'],
+      ['title', 'text'],
+      ['repository', 'text'],
+      ['additions', 'int'],
+      ['deletions', 'int'],
+      ['merged_at', 'timestamp'],
+    ],
+  },
+];
+const W = 270;
+const HEAD = 34;
+const ROW = 28;
+const rows = Math.max(...tables.map((t) => t.cols.length));
+const height = 20 + HEAD + rows * ROW + 20;
+---
+<div class="diagram">
+  <svg viewBox={`0 0 600 ${height}`} style="max-width:720px" role="img" aria-labelledby="model-t model-d">
+    <title id="model-t">Impact Tracker data model</title>
+    <desc id="model-d">Two tables. completed_tasks has id as primary key, linear_issue_id which is unique, title, story_points, completed_at and source. merged_prs has id as primary key, github_pr_id which is unique, title, repository, additions, deletions and merged_at.</desc>
+    {tables.map((t) => (
+      <g>
+        <rect class="card" x={t.x} y="20" width={W} height={HEAD + t.cols.length * ROW} />
+        <rect class="head" x={t.x} y="20" width={W} height={HEAD} />
+        <text class="name" x={t.x + 12} y={20 + HEAD / 2 + 5}>{t.name}</text>
+        {t.cols.map((c, i) => {
+          const y = 20 + HEAD + i * ROW;
+          return (
+            <g>
+              {c[2] && <rect class="key" x={t.x + 1} y={y} width={W - 2} height={ROW} />}
+              <line class="rule" x1={t.x} x2={t.x + W} y1={y} y2={y} />
+              <text x={t.x + 12} y={y + ROW / 2 + 4.5}>{c[0]}</text>
+              <text class="type" x={t.x + W - 12} y={y + ROW / 2 + 4.5} text-anchor="end">{c[1]}{c[2] ? `  ${c[2]}` : ''}</text>
+            </g>
+          );
+        })}
+      </g>
+    ))}
+  </svg>
+</div>
+
+<style>
+  .diagram { color: #000; padding: clamp(12px, 3vw, 28px); }
+  svg { display: block; width: 100%; height: auto; margin-inline: auto; font-family: var(--font); font-size: 13px; }
+  svg text { fill: #000; }
+  .card { fill: #fff; stroke: #000; stroke-width: 1.5; }
+  .head { fill: #000; }
+  .name { fill: #fff !important; font-weight: 600; letter-spacing: 0.04em; }
+  .key { fill: var(--accent); }
+  .rule { stroke: #000; stroke-width: 1; opacity: 0.35; }
+  .type { font-size: 11.5px; }
+</style>

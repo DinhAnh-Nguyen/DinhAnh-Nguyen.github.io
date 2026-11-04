@@ -1,0 +1,26 @@
+---
+// FIG: the same city still as the video poster, with numbered call-outs.
+// Positions are percentages of the 640x800 picture. The names in the picture
+// are demo data, not real people.
+const marks = [
+  { n: 1, x: 34, y: 27 },   // awake house, lit windows
+  { n: 2, x: 61, y: 15 },   // sleeping house
+  { n: 3, x: 87, y: 47 },   // sleeping house
+];
+---
+<div class="frame">
+  <div class="drift">
+    <img src="/projects/connecton/city-poster.webp" width="640" height="800" alt="Isometric 3D city. Five narrow brick buildings stand on city blocks with streets, cars and trees. Three buildings have dark windows and a sleeping Z symbol above them." loading="lazy" decoding="async" />
+    {marks.map((m) => (
+      <span class="mark" style={`left:${m.x}%;top:${m.y}%`} aria-hidden="true">{m.n}</span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .frame { overflow: hidden; background: #000; aspect-ratio: 4 / 5; }
+  .drift { position: relative; width: 100%; height: 100%; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .mark { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 28px; height: 28px;
+    border: 2px solid #000; background: var(--accent); color: #000; font-weight: 600; font-size: 13px; }
+</style>
