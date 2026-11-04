@@ -2,7 +2,6 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ExtLink from '../../components/ExtLink.astro';
-import Gutter from '../../components/Gutter.astro';
 import Figure from '../../components/Figure.astro';
 import LoopVideo from '../../components/LoopVideo.astro';
 import ProseH2 from '../../components/ProseH2.astro';
@@ -23,12 +22,9 @@ const links = [
   d.live && { href: d.live, label: 'Live site ->' },
   d.repo && { href: d.repo, label: 'Source code ->' },
 ].filter((l): l is { href: string; label: string } => Boolean(l));
-// No email address on the site: access requests go through the contact form.
-const askHref = `/?topic=${encodeURIComponent('Source access: ' + d.title)}#contact`;
 ---
 <Base title={`${d.title} | Daniel Nguyen`} description={d.summary}>
   <section class="section on-dark head">
-    <Gutter />
     <div class="wrap head-grid">
       <div class="head-text">
         <p class="crumb"><a href="/#work">&lt;- all work</a></p>
@@ -42,13 +38,14 @@ const askHref = `/?topic=${encodeURIComponent('Source access: ' + d.title)}#cont
             <tr><th scope="row">Role</th><td>{d.role}</td></tr>
             <tr><th scope="row">Year</th><td>{d.year}</td></tr>
             <tr><th scope="row">Stack</th><td>{d.stack.join(', ')}</td></tr>
-            <tr>
-              <th scope="row">Links</th>
-              <td>
-                {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
-                {!d.repo && (<>{links.length > 0 && ' / '}Source is private. <a href={askHref}>Ask for access</a></>)}
-              </td>
-            </tr>
+            {links.length > 0 && (
+              <tr>
+                <th scope="row">Links</th>
+                <td>
+                  {links.map((l, i) => (<>{i > 0 && ' / '}<ExtLink href={l.href}>{l.label}</ExtLink></>))}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -70,7 +67,6 @@ const askHref = `/?topic=${encodeURIComponent('Source access: ' + d.title)}#cont
   </section>
 
   <section class="section on-light">
-    <Gutter />
     <div class="wrap">
       <div class="prose case">
         <Content components={{ h2: ProseH2 }} />
@@ -79,7 +75,6 @@ const askHref = `/?topic=${encodeURIComponent('Source access: ' + d.title)}#cont
   </section>
 
   <section class="section on-dark nextup">
-    <Gutter />
     <div class="wrap">
       <a href={`/projects/${next.id}/`}>
         <span>NEXT PROJECT</span>

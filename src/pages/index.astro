@@ -3,8 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Frames from '../components/Frames.astro';
 import ExtLink from '../components/ExtLink.astro';
-import Noise from '../components/Noise.astro';
-import Gutter from '../components/Gutter.astro';
+import CodeBackdrop from '../components/CodeBackdrop.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Ticker from '../components/Ticker.astro';
 import ContactForm from '../components/ContactForm.astro';
@@ -64,8 +63,7 @@ const skills: [string, string][] = [
 <Base>
   <!-- HERO (dark) -->
   <section class="section on-dark hero">
-    <Noise />
-    <Gutter />
+    <CodeBackdrop />
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
@@ -87,7 +85,6 @@ const skills: [string, string][] = [
 
   <!-- 01 WORK (light) -->
   <section class="section on-light" id="work" aria-labelledby="work-h">
-    <Gutter />
     <div class="wrap">
       <SectionHead n={1} total={4} title="Selected work" id="work-h" />
       <ul class="rows">
@@ -115,7 +112,6 @@ const skills: [string, string][] = [
 
   <!-- 02 EXPERIENCE (dark) -->
   <section class="section on-dark" id="experience" aria-labelledby="exp-h">
-    <Gutter />
     <div class="wrap">
       <SectionHead n={2} total={4} title="Experience" id="exp-h" />
       <ul class="jobs">
@@ -137,7 +133,6 @@ const skills: [string, string][] = [
 
   <!-- 03 ABOUT + SKILLS (light) -->
   <section class="section on-light" id="about" aria-labelledby="about-h">
-    <Gutter />
     <div class="wrap">
       <SectionHead n={3} total={4} title="About" id="about-h" />
       <div class="about-text reveal">
@@ -167,7 +162,6 @@ const skills: [string, string][] = [
 
   <!-- 04 CONTACT (dark) -->
   <section class="section on-dark" id="contact" aria-labelledby="contact-h">
-    <Gutter />
     <div class="wrap">
       <SectionHead n={4} total={4} title="Contact" id="contact-h" />
       <div class="contact-grid">
