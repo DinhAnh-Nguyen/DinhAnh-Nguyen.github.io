@@ -209,7 +209,9 @@ const skills: [string, string][] = [
     .idx { grid-column: auto; }
   }
   .rows a:hover, .rows a:focus-visible { background: var(--fg); color: var(--bg); outline-offset: -2px; }
-  .idx { font-size: 13px; letter-spacing: 0.06em; padding-top: 0.5em; }
+  /* Accent on paper is 4.8:1. The hovered row turns black, where the lighter accent is needed (6.8:1). */
+  .idx { font-size: 13px; letter-spacing: 0.06em; padding-top: 0.5em; color: var(--mark); }
+  .rows a:hover .idx, .rows a:focus-visible .idx { color: var(--accent-lit); }
   .rows .main { display: grid; gap: 8px; }
   .rows strong { font-size: clamp(1.6rem, 5vw, 3rem); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
   .rows .sum { font-size: 15px; max-width: 46em; }
