@@ -235,6 +235,9 @@ const skills: [string, string][] = [
   .about-text { margin-bottom: clamp(40px, 6vw, 72px); }
   .edu { color: var(--muted); font-size: 14px; }
   .skills th { background: var(--accent); color: var(--paper); width: 1%; white-space: nowrap; }
+  /* On phones the label column is a third of the table and its labels may wrap, which leaves
+     the values enough room to avoid breaking words like "react-three-fiber" mid-way. */
+  @media (max-width: 599px) { .skills th { width: 34%; white-space: normal; } }
   /* From 800px up, the label column ends where Experience's text column begins. */
   @media (min-width: 800px) {
     .skills { table-layout: fixed; }
