@@ -64,7 +64,6 @@ const skills: [string, string][] = [
   <!-- HERO (dark) -->
   <section class="section on-dark hero">
     <CodeBackdrop />
-    <div class="noise" aria-hidden="true"></div>
     <div class="wrap">
       <p class="eyebrow">&gt; hello, world<span class="cursor" aria-hidden="true">_</span></p>
       <h1>Daniel<br />Nguyen</h1>
@@ -184,13 +183,6 @@ const skills: [string, string][] = [
 <style>
   .hero { padding-top: clamp(40px, 7vw, 88px); }
   .hero { --fs: clamp(2.6rem, 10vw, 6.5rem); --lh: 1.05; }
-  /* Old-TV grain over the code backdrop and under the text. It is a still image, so it
-     adds no motion. The SVG is fractal noise turned to grey and contrast-boosted. */
-  .noise {
-    position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    opacity: 0.14;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
   .eyebrow { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
   h1 { font-size: var(--fs); line-height: var(--lh); letter-spacing: -0.03em; margin-bottom: 28px; }
   .pitch { max-width: 34em; color: var(--muted); }
