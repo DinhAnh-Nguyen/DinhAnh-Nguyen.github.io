@@ -12,23 +12,31 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 
 const experience = [
   {
-    when: '2025-02 / NOW',
-    role: 'Front-end Developer',
-    org: 'Empowered Futures',
+    when: '2025-08 / 2026-10',
+    role: 'Software Developer',
+    org: 'Webvar/MaxTech',
     points: [
-      'Work with designers to improve a web app UI in React.',
-      'Integrated Docker, Prisma and GraphQL for scalable development and database management.',
-      'Ship quality pull requests, following senior feedback and agile practice.',
+      'Led the ground-up build of Helm, a multi-tenant security control plane on CrowdStrike Falcon, using React 19 and TypeScript.',
+      'Architected the backend with Hono, tRPC 11 and Drizzle ORM to process live endpoint telemetry and automate monthly security assessments.',
+      'Integrated BetterAuth and PostHogAI, and merged 250+ pull requests in a two-month launch window using AI workflows.',
     ],
   },
   {
-    when: '2024-11 / NOW',
+    when: '2025-02 / 2025-08',
+    role: 'Front-end Developer',
+    org: 'Empowered Futures',
+    points: [
+      'Built responsive React UIs with the design team, turning wireframes into accessible components and raising accessibility scores to 98%.',
+      'Tuned database queries with GraphQL and Prisma, and containerized the app with Docker for consistent deployments.',
+    ],
+  },
+  {
+    when: '2024-11 / 2025-07',
     role: 'Full-stack Developer',
     org: 'New Idea Machine',
     points: [
-      'Built and maintain a contractor information database with React and Firebase.',
-      'Created reusable components and app-wide state with React Context.',
-      'Iterate quickly with clients, keeping communication open and responsive.',
+      'Built a real-time contractor management system with React and Firebase for secure data retrieval and scalable NoSQL storage.',
+      'Used React Context for global state and built a reusable component library, improving frontend performance by 30%.',
     ],
   },
   {
@@ -52,12 +60,13 @@ const experience = [
 ];
 
 const skills: [string, string][] = [
-  ['Languages', 'TypeScript, JavaScript, Python, Java, C#, HTML, CSS (learning Go)'],
+  ['Languages', 'TypeScript, JavaScript, Python, SQL, C++, Java, C#, HTML, CSS (learning Go)'],
   ['Frontend', 'React, Next.js, Tailwind CSS, three.js / react-three-fiber'],
   ['Backend', 'Node.js, Express, GraphQL, Prisma, Drizzle'],
   ['Data', 'PostgreSQL, MySQL, MongoDB, Firebase, Supabase'],
-  ['Cloud & DevOps', 'Docker, Git, GitHub, Azure DevOps, Vercel, AWS'],
-  ['Tools', 'Jest, Figma, VS Code'],
+  ['AI & Integrations', 'OpenAI/Anthropic APIs, RAG architecture, HiggsField AI, Replit, n8n, Zapier'],
+  ['Cloud & DevOps', 'Docker, Git, GitHub, CI/CD, Azure DevOps, Vercel, AWS'],
+  ['Tools', 'Jest, Figma, VS Code, Cursor, GitHub Copilot, Lighthouse, PostHogAI, BetterAuth'],
 ];
 ---
 <Base>
@@ -139,7 +148,7 @@ const skills: [string, string][] = [
       <div class="about-text reveal">
         <p>
           I&rsquo;m a software engineer based in Calgary. Since 2024 I&rsquo;ve
-          worked across four teams on React, Next.js, Firebase, GraphQL and Prisma,
+          worked across five teams on React, Next.js, Firebase, GraphQL and Prisma,
           shipping features through code review, sprints and CI.
         </p>
         <p>
@@ -148,7 +157,7 @@ const skills: [string, string][] = [
           to put the rules that matter (XP, limits, ownership) in the database, not the browser.
         </p>
         <p>Right now I&rsquo;m learning Go, and looking for my next engineering role.</p>
-        <p class="edu">Software Development Diploma, SAIT (2025).</p>
+        <p class="edu">Bachelor of Technology in Software Development, SAIT (expected 2027).</p>
       </div>
 
       <table class="spec skills reveal" aria-label="Skills by area">
