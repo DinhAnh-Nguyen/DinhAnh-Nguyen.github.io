@@ -1,12 +1,12 @@
 ---
 title: Connecton
 order: 1
-summary: A 3D isometric city where every person you want to keep in touch with lives in a house. Check in to wake it up.
+summary: A 3D isometric city where every person you care about lives in a house. It remembers their birthdays, favorites and wishes, reminds you in time and drafts the message.
 year: "2026"
 added: "2026-10"
 role: Design, full-stack build, deploy
 stack: [React 19, three.js, Supabase, Tailwind, PWA, Gemini]
-live: https://connecton-landing.vercel.app/
+live: https://getconnecton.com/
 hero: video
 ---
 import Figure from '../../components/Figure.astro';
@@ -16,11 +16,11 @@ import ConnectonRules from '../../components/figures/ConnectonRules.astro';
 
 ## The problem
 
-Staying in touch with people is easy to intend and easy to forget. Contact lists and reminder apps feel like chores, so nobody opens them.
+Staying in touch with people is easy to intend and easy to forget. Birthdays slip by, the gift idea someone mentioned months ago is gone, and weeks pass without a message. Contact lists and reminder apps feel like chores, so nobody opens them.
 
 ## The idea
 
-Every connection lives in a house in a small 3D city. A house goes dark and falls asleep when you have not been in touch for as long as you chose for that person. Logging a note wakes it, earns XP, and grows the city. An AI helper drafts your next message from your recent notes, so the hardest part (starting) is done for you.
+Every person you care about lives in a house in a small 3D city. You note what you learn (their birthday, what they love, what they wished for), and Connecton reminds you in time and drafts the message. A house goes dark and falls asleep when you have been out of touch for as long as you chose for that person. Writing a real note wakes it, earns XP and grows the city.
 
 <Figure n={2} caption="The city, annotated. Names in the picture are demo data." split parallax>
   <ConnectonCity />
@@ -35,11 +35,13 @@ Every connection lives in a house in a small 3D city. A house goes dark and fall
 
 ## What I built
 
-- **A 3D isometric city** with react-three-fiber: streets, traffic, parks, hills and a harbor, all generated from the account id so no extra data is stored.
-- **A server-side rules engine.** XP is decided by a Postgres function (`log_interaction()`), not the browser. Row-level security gives every row an owner, and the 20-connection cap is enforced by the database.
-- **AI message drafts** through Gemini, with the tone chosen from how you know the person and a rolling daily limit enforced on the server.
-- **Push reminders** from a scheduled Supabase edge function that runs every 15 minutes, delivered to an installable PWA.
-- **A separate landing page** in Astro: about 13 KB compressed, no analytics unless configured, and every button opens the app on sign-up.
+- **A 3D isometric city** with react-three-fiber: streets, traffic, parks, hills, a harbor and people, generated from the account id so no extra data is stored. Houses can be moved to the lot you want.
+- **Things to remember.** Each person has a birthday (the year is optional), how you know them, and short lists of likes, wishes and gift ideas, and things to avoid. A "We talked" button restarts the clock when there is nothing to write down.
+- **Reminders on your terms.** A scheduled Supabase edge function runs every 15 minutes and sends at most one web push a day, around noon in your own time zone: on a birthday and three days before, and when a house falls asleep. New connections start with no "you haven't talked" nudges. Single-person reminders have **We talked** and **Add a note** buttons, and a switch decides whether a locked screen shows details.
+- **AI message drafts** through Gemini, as a text or an email, with the tone chosen from how you know the person and written from their recent notes. The server checks the caller's login and enforces a rolling daily limit, and falls back across models when one is busy.
+- **A server-side rules engine.** XP is decided by a Postgres function (`log_interaction()`), not the browser: only real notes count, with bonuses for catching up on a sleeping house and for weekly streaks. A city level unlocks house styles, lots and street life, and each person has their own Closeness level.
+- **An installable PWA** with a four-screen first-run tour, email sign-up with a 6-digit code, and the 3D scene tuned per device (pixel ratio, frame rate, tap detection).
+- **A separate landing page** in Astro, where every button opens the app on sign-up and carries the campaign source, so sign-ups can be traced back to the visit.
 
 <Figure n={3} caption="System overview: the browser talks to Supabase; edge functions call Gemini and send push reminders.">
   <ConnectonSystem />
@@ -47,9 +49,11 @@ Every connection lives in a house in a small 3D city. A house goes dark and fall
 
 ## Engineering notes
 
-- 18 ordered SQL migrations, each next to its test, run with Node's built-in test runner.
-- The model files are compressed and checked by scripts (`models:compress`, `models:check`) so the 3D scene stays light on phones.
-- Anything that affects fairness or cost (XP, draft limits, the connection cap) lives in the database, not the client.
+- SQL migrations each sit next to a test that runs them in a real in-process Postgres (PGlite), against the same cases as the JavaScript XP rules, so the two cannot drift apart.
+- Anything that affects fairness or cost (XP, draft limits, the 20-connection cap, house styles by level) lives in the database, not the client. Row-level security gives every row an owner.
+- Analytics are minimal: a fixed list of anonymous events whose properties are restricted to numbers, booleans and short tokens, so names, notes and emails cannot be sent. Retention is measured from the app's own database.
+- A smoke test opens the 3D scene in a real browser for twelve city layouts, because unit tests cannot tell when the scene itself crashes. A test also guards avatar models from being shrunk too far.
+- Models are compressed and checked by scripts so the town stays light on phones.
 
 <Figure n={4} caption="Where the rules live: the database decides XP, ownership and limits.">
   <ConnectonRules />
@@ -57,4 +61,4 @@ Every connection lives in a house in a small 3D city. A house goes dark and fall
 
 ## Status
 
-Live and in active development.
+Live and free while in beta, with the app at app.getconnecton.com. Still in active development.
