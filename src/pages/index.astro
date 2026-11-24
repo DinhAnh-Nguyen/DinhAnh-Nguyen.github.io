@@ -7,6 +7,8 @@ import CodeBackdrop from '../components/CodeBackdrop.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Ticker from '../components/Ticker.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { SITE } from '../config.js';
+import { personJsonLd, serializeJsonLd } from '../lib/seo.js';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 
@@ -61,6 +63,7 @@ const skills: [string, string][] = [
 ];
 ---
 <Base>
+  <script slot="head" type="application/ld+json" set:html={serializeJsonLd(personJsonLd(SITE))} />
   <!-- HERO (dark) -->
   <section class="section on-dark hero">
     <CodeBackdrop />

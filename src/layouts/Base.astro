@@ -32,6 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
+    <slot name="head" />
     <script is:inline>
       var d = document.documentElement;
       d.classList.add('js');
